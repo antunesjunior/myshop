@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->date('birth')->nullable();
             $table->enum('gender', ['m', 'f']);
-            $table->string('picture');
-            $table->boolean('is_admin');
+            $table->string('picture')->nullable();
+            $table->boolean('is_admin')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
