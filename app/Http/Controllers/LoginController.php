@@ -30,4 +30,12 @@ class LoginController extends Controller
 
         return $user->is_admin = 1 ? redirect()->route('admin.home') : redirect()->route('test');
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+
+        return redirect()->route('admin.login');
+    }
 }

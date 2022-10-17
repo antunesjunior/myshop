@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LoginController::class, "loginAdmin"])->name('admin.login');
+Route::get('/logout', [LoginController::class, "loginAdmin"])->name('user.logout');
 Route::post('/auth', [LoginController::class, "authentication"])->name('user.auth');
-Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
-Route::get('/home/test', [HomeController::class, "home"])->name('test');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
+    Route::get('/home/test', [HomeController::class, "home"])->name('test');
+    
+});
