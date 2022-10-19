@@ -28,7 +28,9 @@ class LoginController extends Controller
         $request->session()->regenerate();
         $user = User::where('email', $request->email)->first();
 
-        return $user->is_admin = 1 ? redirect()->route('admin.home') : redirect()->route('test');
+        return $user->is_admin = 1 
+                ? redirect()->route('admin.home', $user) 
+                : redirect()->route('test');
     }
 
     public function logout(Request $request)

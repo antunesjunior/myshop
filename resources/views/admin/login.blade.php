@@ -13,11 +13,11 @@
     <div class="container-xxl">
         <div class="row">
             <div class="col-lg-5 bg-dark" style="height: 100vh; padding: 0;">
-                <img src="{{ asset('img/capa-photo.jpg') }}" class="img-fluid">
+                <img src="{{ asset('img/photo-capa-2.jpg') }}" class="img-fluid" style="height: 100%">
             </div>
             <div class="col-lg-4 offset-1">
             
-                <h1 class="mt-5">Adim</h1>
+                <h1 class="mt-4 mb-3">NossaLoja | Admin</h1>
 
                 @if (session()->get('alert'))
                     <div class="alert alert-danger my-2" role="alert">

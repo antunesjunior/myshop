@@ -9,7 +9,7 @@
     <title>NossaLoja</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
+    <nav class="navbar navbar-expand-lg bg-light py-3">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
                 MinhaLoja
@@ -24,10 +24,10 @@
             </form>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-end">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Criar Produto</a>
+                <a href="{{ route('admin.home') }}" class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a href="{{ route('products.create') }}" class="nav-link active" aria-current="page" href="#">Criar Produto</a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('user.logout') }}" class="nav-link">Sair</a>
