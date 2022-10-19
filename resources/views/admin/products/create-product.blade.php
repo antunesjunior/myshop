@@ -58,7 +58,12 @@
                             <td>{{ $item->price }}</td>
                             <td>{{ $item->brand }}</td>
                             <td>{{ $item->stock }}</td>
-                            <td><a href="#">Ver detalhes</a></td>
+                            <td>
+                                <a href="{{ route('products.show', $item->id) }}"
+                                    class="btn btn-light">
+                                Ver detalhes
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     @endif
@@ -67,5 +72,5 @@
         </div>
     </div>
 </div>
-    
+    2
 @endsection
