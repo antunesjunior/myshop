@@ -39,14 +39,19 @@ class ProductController extends Controller
     {
         $input = $request->validate([
             'name' => ['required'],
-            'price' => ['required', 'numeric'],
             'brand' => ['required'],
-            'stock' => ['required', 'numeric'],
-            'description' => ['required']
+            'description' => ['required'],
+            'cover' => ['file', 'required'],
+            'price' => ['required', 'numeric']
         ]);
 
-        Product::create($input);
+        $cover = $request->file('cover');
+        $coverName = $cover->hashName();
+        $cover->storeAs('public/products/cover', $coverName);
+        $input['cover'] = $coverName;
+        $input['stock'] = 0;
 
+        Product::create($input);
         return view('admin.products.create-product', [
             'products' => Product::all()
         ]);

@@ -3,8 +3,9 @@
 @section('content')
     <div class="container">
         <div class="row mt-5">
-            <div class="col-lg-4 border rounded" style="width: 400px; height:450px">
-                <img src="" alt="" class="img-fluid">
+            <div class="col-lg-4 border rounded" style="width: 300px; height:350px">
+                <img src="{{ asset("storage/products/cover/{$product->cover}") }}" 
+                    alt="{{ $product->name }}" class="img-fluid">
             </div>
             <div class="col-lg-6 offset-1">
                 <h2 class="pb-3">{{ $product->name }} {{ $product->brand }}</h2>
