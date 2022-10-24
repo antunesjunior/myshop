@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
 use App\Models\Stock;
-use App\Models\Vendor;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class StockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,10 +24,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'categs' => Category::all()
-        ]);
+        //
     }
 
     /**
@@ -41,33 +35,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->validate([
-            'name'  => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['file', 'required'],
-            'price' => ['required', 'numeric'],
-            'category_id' => ['required', 'numeric']
-        ]);
-
-
-        if ($request->input('category_id') == 0) {
-            unset($input['category_id']);
-        }
-
-        $cover = $request->file('cover');
-        $coverName = $cover->hashName();
-        $cover->storeAs('public/products/cover', $coverName);
-        $input['cover'] = $coverName;
-
-
-        $product = Product::create($input);
-        Stock::create(['product_id' => $product->id]);
-
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'categs' => Category::all()
-        ]);
+        //
     }
 
     /**
@@ -78,11 +46,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.products.product', [
-            'product' => $product,
-            'vendors' => Vendor::all()
-        ]);
+        //
     }
 
     /**
@@ -105,7 +69,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

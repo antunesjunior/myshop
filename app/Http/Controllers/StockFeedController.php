@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
 use App\Models\Stock;
-use App\Models\Vendor;
+use App\Models\StockFeed;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class StockFeedController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,10 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'categs' => Category::all()
-        ]);
+        //
     }
 
     /**
@@ -41,33 +36,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->validate([
-            'name'  => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['file', 'required'],
-            'price' => ['required', 'numeric'],
-            'category_id' => ['required', 'numeric']
+        $inputs = $request->validate([
+            "vendor" => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric'],
+            'product' => ['required', 'numeric']
         ]);
 
-
-        if ($request->input('category_id') == 0) {
-            unset($input['category_id']);
+        if($request->vendor == 0){
+            return back();
         }
 
-        $cover = $request->file('cover');
-        $coverName = $cover->hashName();
-        $cover->storeAs('public/products/cover', $coverName);
-        $input['cover'] = $coverName;
+        $record = Stock::where('product_id', $request->product)->first();
+        $record->qtd_prod += $request->quantity;
+        
+        if ($record->save()) {
+            StockFeed::create([
+                'product_id' => $request->product,
+                'vendor_id' => $request->vendor,
+                'qtd_prod'  => $request->quantity
+            ]);
+        }
 
-
-        $product = Product::create($input);
-        Stock::create(['product_id' => $product->id]);
-
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'categs' => Category::all()
-        ]);
+        return redirect()->route('products.show', $request->product);
+        
     }
 
     /**
@@ -78,11 +69,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.products.product', [
-            'product' => $product,
-            'vendors' => Vendor::all()
-        ]);
+        //
     }
 
     /**
@@ -105,7 +92,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

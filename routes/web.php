@@ -4,6 +4,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\StockFeedController;
 use App\Http\Controllers\SupCategoryController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
@@ -32,5 +34,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vendors', VendorController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);
+    Route::resource('feeds', StockFeedController::class);
     
 });

@@ -54,6 +54,7 @@
     </main>
     
 
-    <script src="{{ asset('bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <div class="container-lg">
     <div class="row mt-3">
         <div class="col-md-4">
-            <h2 class="mb-3">Cadastrar produto</h2>
+            <h2 class="mb-3">Produto</h2>
             <form action="{{ route('products.store') }}" method="post"
                 enctype="multipart/form-data">
                 @csrf
@@ -24,35 +24,20 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
-                        <label class="form-label">Fornecedor</label>
-                        <select name="vendor_id" class="form-control">
-                            <option value="0">Selecione</option>
-                            @if (!$vendors->isEmpty())
-                                @foreach ($vendors as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                     </div>
-    
-                     <div class="col-6">
-                        <label class="form-label">Categoria</label>
-                        <select name="category_id" class="form-control">
-                            <option value="0">Nenhuma</option>
-                            @if (!$categs->isEmpty())
-                                @foreach ($categs as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
+                <div class="pb-2">
+                    <label class="form-label">Categoria</label>
+                    <select name="category_id" class="form-control">
+                        <option value="0">Nenhuma</option>
+                        @if (!$categs->isEmpty())
+                            @foreach ($categs as $item)
+                                <option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
+
 
                 <div>
                     <label for="" class="form-label">Foto</label>
@@ -89,8 +74,8 @@
                 </div>
             </form>
 
-            <table class="table text-center">
-                <thead class="thead-dark">
+            <table class="table text-center mt-3">
+                <thead class="table-dark">
                     <tr>
                         <th>Código</th>
                         <th>Produto</th>
