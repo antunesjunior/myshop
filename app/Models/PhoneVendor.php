@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SupCategory extends Model
+class PhoneVendor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['number', 'vendor_id'];
 
-    public function categories()
+    public function vendor()
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Vendor::class);
     }
 }

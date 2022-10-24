@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Product;
-use App\Models\Vendor;
+use App\Models\SupCategory;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,10 +25,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'vendors' => Vendor::all(),
-            'categs' => Category::all()
+        return view('admin.categories', [
+            'categs' => Category::all(),
+            'supCategs' => SupCategory::all()
         ]);
     }
 
@@ -41,35 +39,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->validate([
+        $inputs = $request->validate([
             'name' => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['file', 'required'],
-            'price' => ['required', 'numeric'],
-            'vendor_id' => ['required'],
-            'category_id' => ['numeric']
+            'sup_category_id' => ['required']
         ]);
 
-        if ($request->input('vendor_id') == 0) {
-            return back();
+        if ($request->input('sup_category_id') == 0) {
+            unset($inputs['sup_category_id']);
         }
 
-        if ($request->input('category_id') == 0) {
-            unset($input['category_id']);
-        }
+        Category::create($inputs);
 
-        $cover = $request->file('cover');
-        $coverName = $cover->hashName();
-        $cover->storeAs('public/products/cover', $coverName);
-        $input['cover'] = $coverName;
-
-
-        Product::create($input);
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'vendors' => Vendor::all(),
-            'categs' => Category::all()
+        return view('admin.categories', [
+            'categs' => Category::all(),
+            'supCategs' => SupCategory::all()
         ]);
     }
 
@@ -81,10 +64,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.products.product', [
-            'product' => $product
-        ]);
+        //
     }
 
     /**

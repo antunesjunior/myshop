@@ -12,7 +12,7 @@
                 
                 <table class="table text-center">
                     <thead>
-                        <th>Código do Produto</th>
+                        <th>Código</th>
                         <th>Marca</th>
                         <th>Preço (kz)</th>
                     </thead>

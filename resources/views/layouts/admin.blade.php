@@ -27,7 +27,19 @@
                 <a href="{{ route('admin.home') }}" class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('products.create') }}" class="nav-link active" aria-current="page" href="#">Criar Produto</a>
+                <a href="{{ route('products.create') }}" class="nav-link active" aria-current="page" href="#">Produtos</a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('categories.create') }}" class="nav-link active" 
+                    aria-current="page" href="#">
+                  Categorias
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('vendors.create') }}" class="nav-link active" 
+                    aria-current="page" href="#">
+                  Fornecedores
+                </a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('user.logout') }}" class="nav-link">Sair</a>

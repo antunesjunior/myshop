@@ -24,23 +24,34 @@
                     </div>
                 </div>
 
-                <div class="pb-2">
-                    <label class="form-label">Fornecedor</label>
-                    <select name="vendor" class="form-control">
-                         <option value="">selecionar</option>
-                         <option value="">LactiaAngol</option>
-                         <option value="">Casa de electrónicos</option>
-                    </select>
-                 </div>
-
-                 <div class="pb-2">
-                    <label class="form-label">Categoria</label>
-                    <select name="category" class="form-control">
-                        <option value="">Nenhuma</option>
-                        <option value="">Electrónicos</option>
-                        <option value="">Calçados</option>
-                        <option value="">Construçã</option>
-                    </select>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="form-label">Fornecedor</label>
+                        <select name="vendor_id" class="form-control">
+                            <option value="0">Selecione</option>
+                            @if (!$vendors->isEmpty())
+                                @foreach ($vendors as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                     </div>
+    
+                     <div class="col-6">
+                        <label class="form-label">Categoria</label>
+                        <select name="category_id" class="form-control">
+                            <option value="0">Nenhuma</option>
+                            @if (!$categs->isEmpty())
+                                @foreach ($categs as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -80,24 +91,26 @@
 
             <table class="table text-center">
                 <thead class="thead-dark">
-                    <th>Produto</th>
-                    <th>Marca</th>
-                    <th>Preço(kz)</th>
-                    <th>Código</th>
-                    <th>#</th>
+                    <tr>
+                        <th>Código</th>
+                        <th>Produto</th>
+                        <th>Marca</th>
+                        <th>Preço(kz)</th>
+                        <th>#</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @if (!$products->isEmpty())
                         @foreach ($products as $item)
                         <tr>
+                            <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->brand }}</td>
                             <td>{{ $item->price }}</td>
-                            <td>{{ $item->id }}</td>
                             <td>
                                 <a href="{{ route('products.show', $item->id) }}"
                                     class="btn btn-light">
-                                Ver detalhes
+                                Detalhes
                                 </a>
                             </td>
                         </tr>
@@ -108,5 +121,4 @@
         </div>
     </div>
 </div>
-    2
 @endsection

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
+use App\Models\PhoneVendor;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class VendorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,10 +25,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'vendors' => Vendor::all(),
-            'categs' => Category::all()
+        return view('admin.vendor', [
+            'vendors' => Vendor::all()
         ]);
     }
 
@@ -43,33 +40,26 @@ class ProductController extends Controller
     {
         $input = $request->validate([
             'name' => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['file', 'required'],
-            'price' => ['required', 'numeric'],
-            'vendor_id' => ['required'],
-            'category_id' => ['numeric']
+            'phone_1'=> ['required'],
+            'phone_2'=> ['required']
+        ]);
+        
+        $vendor = Vendor::create([
+            'name' => $request->name
         ]);
 
-        if ($request->input('vendor_id') == 0) {
-            return back();
-        }
+        PhoneVendor::create([
+            'number' => $request->phone_1,
+            'vendor_id' => $vendor->id
+        ]);
 
-        if ($request->input('category_id') == 0) {
-            unset($input['category_id']);
-        }
+        PhoneVendor::create([
+            'number' => $request->phone_2,
+            'vendor_id' => $vendor->id
+        ]);
 
-        $cover = $request->file('cover');
-        $coverName = $cover->hashName();
-        $cover->storeAs('public/products/cover', $coverName);
-        $input['cover'] = $coverName;
-
-
-        Product::create($input);
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'vendors' => Vendor::all(),
-            'categs' => Category::all()
+        return view('admin.vendor', [
+            'vendors' => Vendor::all()
         ]);
     }
 
@@ -81,10 +71,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.products.product', [
-            'product' => $product
-        ]);
+        //
     }
 
     /**

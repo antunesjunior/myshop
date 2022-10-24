@@ -15,7 +15,14 @@ class Product extends Model
         'brand',
         'stock', 
         'cover',
-        'description'
+        'description',
+        'vendor_id',
+        'category_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
     
 }
