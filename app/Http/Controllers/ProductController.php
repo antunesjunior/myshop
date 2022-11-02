@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Vendor;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -18,6 +20,36 @@ class ProductController extends Controller
     public function index()
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'value' => 'required',
+            'key' => 'required',
+        ]);
+
+        switch ($request->key) {
+            case 'code':
+                $result = Product::where('id', $request->value)->get();
+                break;
+
+            case 'name':
+                $result = Product::where('name', 'LIKE',"%{$request->value}%")->get();
+                break;
+
+            default:
+                return back();
+                break;
+        }
+
+        $message = "Total de resultados da pesquisa por '{$request->value}': {$result->count()}";
+        session()->flash('message', $message);
+
+        return view('admin.products.create-product', [
+            'products' => $result,
+            'categs'  => Category::all()
+        ]);
     }
 
     /**
@@ -79,9 +111,11 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+
         return view('admin.products.product', [
             'product' => $product,
-            'vendors' => Vendor::all()
+            'vendors' => Vendor::all(),
+            'categs'  => Category::all()
         ]);
     }
 
@@ -105,7 +139,32 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->validate([
+            'name'  => ['required'],
+            'brand' => ['required'],
+            'description' => ['required'],
+            'cover' => ['nullable', 'file'],
+            'price' => ['required', 'numeric'],
+            'category_id' => ['required', 'numeric']
+        ]);
+
+        if ($request->input('category_id') == 0) {
+            unset($input['category_id']);
+        }
+
+        $product = Product::findOrFail($id);
+
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover');
+            $coverName = $cover->hashName();
+            $cover->storeAs('public/products/cover', $coverName);
+            $input['cover'] = $coverName;
+
+            Storage::delete("public/products/cover/{$product->cover}");
+        }
+
+        $product->fill($input)->save();
+        return redirect()->route('products.show', $product->id);
     }
 
     /**
@@ -116,6 +175,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+        
+        return redirect()->route('products.create');
     }
 }

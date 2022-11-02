@@ -31,6 +31,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home/test', [HomeController::class, "home"])->name('test');
 
     Route::resource('products', ProductController::class);
+    Route::post('/products/search', [ProductController::class, "search"])->name('products.search');
+
     Route::resource('vendors', VendorController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);

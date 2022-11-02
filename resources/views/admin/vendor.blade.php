@@ -49,8 +49,8 @@
                 </div>
             </form>
 
-            <table class="table text-center">
-                <thead class="thead-dark">
+            <table class="table text-center mt-3">
+                <thead class="table-dark">
                     <th>Código</th>
                     <th>Nome</th>
                     <th>Telefone-1</th>
@@ -67,7 +67,7 @@
                         <td>
                             <a href="{{ route('vendors.show', $item->id) }}"
                                 class="btn btn-light">
-                            Ver detalhes
+                            Detalhes
                             </a>
                         </td>
                     </tr>

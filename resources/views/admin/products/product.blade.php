@@ -37,15 +37,19 @@
 
                 <div class="controls d-flex">
                     <div>
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fill">
                             Abastecer
                         </button>
                     </div>
                     <div class="px-3">
-                        <a href="#" class="btn btn-success ml-5">Editar</a>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit">
+                            Editar
+                        </button>
                     </div>
                     <div>
-                        <a href="#" class="btn btn-danger ">Eliminar</a>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
+                            Eliminar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -53,7 +57,7 @@
     </div>
 
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="fill" tabindex="-1" aria-labelledby="fillLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -70,7 +74,7 @@
                     <div class="row">
                         <div class="col-8">
                             <label class="form-label">Fornecedor</label>
-                            <select name="vendor" class="form-control">
+                            <select name="vendor" class="form-select">
                                 <option value="0">Selecionar</option>
                                 @if (!$vendors->isEmpty())
                                     @foreach ($vendors as $item)
@@ -85,8 +89,89 @@
                             <label class="form-label">Quantidade</label>
                             <input type="number" name="quantity" class="form-control">
                         </div>
-    
                     </div>
+
+                    <div class="form-check pt-3">
+                        <input class="form-check-input" type="checkbox" name="reset" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Redefinir
+                        </label>
+                        <div class="form-text">
+                            Ao clicar, a quantidade no stock será redefinida e não adicionada
+                        </div>
+                      </div>
+                    
+                    <div class="controls pt-5">
+                        <input type="submit" value="Confirmar" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Editar: {{ $product->name }} {{ $product->brand }}
+            </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('products.update', $product->id) }}" 
+                    enctype="multipart/form-data"  method="post">
+                    @csrf
+                    @method('PUT')
+                    <div class="pb-2">
+                        <input type="text" name="name" class="form-control"
+                            placeholder="Produto" value="{{ $product->name }}">
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col-6">
+                            <input type="text" name="brand" class="form-control"
+                                    placeholder="Marca"  value="{{ $product->brand }}">
+                        </div>
+                        <div class="col-6">
+                            <input type="number" name="price" class="form-control" 
+                                placeholder="Preço(kz)"  value="{{ $product->price }}">
+                        </div>
+                    </div>
+    
+                    <div class="pb-2">
+                        <label class="form-label">Categoria</label>
+                        <select name="category_id" class="form-control">
+                            <option value="0">Nenhuma</option>
+                            @if (!$categs->isEmpty())
+                                @foreach ($categs as $item)
+                                    <option 
+                                    @php
+                                        echo $item->id == $product->category_id ? 'selected':''
+                                    @endphp
+                                    value="{{ $item->id }}"
+                                    >
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+    
+                    <div>
+                        <label for="" class="form-label">Foto</label>
+                        <input type="file" name="cover" class="form-control">
+                    </div>
+                    
+                    <div class="py-2">
+                        <label for="" class="form-label">Descrição do produto</label>
+                        <textarea class="form-control" 
+                            name="description" cols="30" rows="3">{{ $product->description }}</textarea>
+                    </div>
+
                     <div class="controls pt-4">
                         <input type="submit" value="Confirmar" class="btn btn-primary">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -99,20 +184,23 @@
         </div>
       </div>
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Abastercer: {{ $product->name }} {{ $product->brand }}
+                {{ $product->name }} {{ $product->brand }}
             </h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('feeds.store') }}" method="post">
+
+                <form action="{{ route('products.destroy', $product->id) }}" method="post">
                     @csrf
-                    @method('POST')
-                    
+                    @method('DELETE')
+                    <h4 class="alert alert-danger">
+                        Deseja realmente apagar este produto?
+                    </h4>
                     <div class="controls pt-4">
                         <input type="submit" value="Confirmar" class="btn btn-primary">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -124,4 +212,5 @@
           </div>
         </div>
       </div>
+
 @endsection

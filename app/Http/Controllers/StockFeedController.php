@@ -47,7 +47,12 @@ class StockFeedController extends Controller
         }
 
         $record = Stock::where('product_id', $request->product)->first();
-        $record->qtd_prod += $request->quantity;
+        
+        if ($request->boolean('reset')) {
+            $record->qtd_prod = $request->quantity;
+        } else {
+            $record->qtd_prod += $request->quantity;
+        }
         
         if ($record->save()) {
             StockFeed::create([

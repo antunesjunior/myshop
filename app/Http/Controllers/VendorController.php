@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PhoneVendor;
 use App\Models\Vendor;
+use DateTime;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -71,7 +72,11 @@ class VendorController extends Controller
      */
     public function show($id)
     {
-        //
+        $vendor = Vendor::findOrFail($id);
+
+        return view('admin.vendor-show', [
+            'vendor' => $vendor
+        ]);
     }
 
     /**
@@ -94,7 +99,25 @@ class VendorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required'],
+            'phone_1'=> ['required'],
+            'phone_2'=> ['required']
+        ]);
+
+        $vendor = Vendor::findOrFail($id);
+        $phone1 = $vendor->phone[0];
+        $phone2 = $vendor->phone[1];
+
+        $vendor->name = $input['name'];
+        $phone1->number = $request->phone_1;
+        $phone2->number = $request->phone_2;
+
+        if($phone1->save() && $phone2->save()){
+            $vendor->save();
+        }
+        
+        return redirect()->route('vendors.show', $id);
     }
 
     /**
@@ -105,6 +128,9 @@ class VendorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $vendor = Vendor::findOrFail($id);
+        $vendor->delete();
+        
+        return redirect()->route('vendors.create');
     }
 }

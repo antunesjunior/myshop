@@ -54,18 +54,18 @@
         </div>
 
         <div class="col-md-7 offset-1">
-            <form action="#" method="get" class="my-2">
+            <form action="{{ route('products.search') }}" method="POST" class="my-2">
+                @csrf
                 <div class="row">
                     <div class="col-4">
-                        <input type="text" name="search" class="form-control"
+                        <input type="text" name="value" class="form-control"
                                 placeholder="pesquisar...">
                     </div>
                     <div class="col-4 d-flex align-items-center">
                         <label for="select" class="form-label">Por:</label>
-                        <select name="by" id="select" class="form-control mx-2">
-                            <option value="#">Código</option>
-                            <option value="#">Nome</option>
-                            <option value="#">Preço</option>
+                        <select name="key" id="select" class="form-control mx-2">
+                            <option value="code">Código</option>
+                            <option value="name">Nome</option>
                         </select>
                     </div>
                     <div class="col-4">
@@ -73,6 +73,12 @@
                     </div>
                 </div>
             </form>
+
+            @if (session()->get('message'))
+                <div class="alert alert-warning" role="alert">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
 
             <table class="table text-center mt-3">
                 <thead class="table-dark">
