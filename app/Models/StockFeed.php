@@ -21,4 +21,11 @@ class StockFeed extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
+
+    public static function lastProductFeed($id)
+    {
+        $record = self::where('product_id', $id)->orderby('created_at', 'desc')
+                        ->limit(1)->first();
+        return $record;
+    }
 }

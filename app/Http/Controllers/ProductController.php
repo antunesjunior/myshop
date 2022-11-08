@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\StockFeed;
 use App\Models\Vendor;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
@@ -111,11 +112,13 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+        $feedRecord = StockFeed::lastProductFeed($id);
 
         return view('admin.products.product', [
             'product' => $product,
             'vendors' => Vendor::all(),
-            'categs'  => Category::all()
+            'categs'  => Category::all(),
+            'lastFeed'=> $feedRecord
         ]);
     }
 

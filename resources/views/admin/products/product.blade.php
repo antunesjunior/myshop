@@ -91,15 +91,15 @@
                         </div>
                     </div>
 
-                    <div class="form-check pt-3">
-                        <input class="form-check-input" type="checkbox" name="reset" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Redefinir
-                        </label>
-                        <div class="form-text">
-                            Ao clicar, a quantidade no stock será redefinida e não adicionada
-                        </div>
-                      </div>
+                    @if (!$product->stockFeed->isEmpty())
+                        <p class="pt-3">
+                            <small>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#fill-edit">
+                                    Editar o último carregamento
+                                </a>
+                            </small>
+                        </p>
+                    @endif
                     
                     <div class="controls pt-5">
                         <input type="submit" value="Confirmar" class="btn btn-primary">
@@ -112,6 +112,62 @@
           </div>
         </div>
       </div>
+
+      @if (!$product->stockFeed->isEmpty())
+        <div class="modal fade" id="fill-edit" tabindex="-1" aria-labelledby="fillLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Ultimo carregamento de: {{ $product->name }} {{ $product->brand }}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('feeds.update', $lastFeed->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="product" value="{{ $product->id }}">
+                        <div class="row">
+                            <div class="col-8">
+                                <label class="form-label">Fornecedor</label>
+                                <select name="vendor" class="form-select">
+                                    <option value="0">Selecionar</option>
+                                    @if (!$vendors->isEmpty())
+                                        @foreach ($vendors as $item)
+                                            <option 
+                                            @php
+                                                echo $item->id == $lastFeed->vendor_id ? 'selected':''
+                                            @endphp
+                                            value="{{ $item->id }}"
+                                            >
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+
+
+                            <div class="col-4">
+                                <label class="form-label">Quantidade</label>
+                                <input type="number" value="{{ $lastFeed->qtd_prod }}" name="quantity" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="controls pt-5">
+                            <input type="submit" value="Editar" class="btn btn-primary">
+                            <button type="button" 
+                                class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#fill">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+      @endif
 
       <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
         <div class="modal-dialog">

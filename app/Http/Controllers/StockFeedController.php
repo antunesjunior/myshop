@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockFeed;
 use Illuminate\Http\Request;
@@ -47,12 +48,7 @@ class StockFeedController extends Controller
         }
 
         $record = Stock::where('product_id', $request->product)->first();
-        
-        if ($request->boolean('reset')) {
-            $record->qtd_prod = $request->quantity;
-        } else {
-            $record->qtd_prod += $request->quantity;
-        }
+        $record->qtd_prod += $request->quantity;
         
         if ($record->save()) {
             StockFeed::create([
@@ -97,7 +93,27 @@ class StockFeedController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            "vendor" => ['required', 'numeric'],
+            'quantity' => ['required', 'numeric'],
+            'product' => ['required', 'numeric']
+        ]);
+
+        $feed = StockFeed::findOrFail($id);
+
+        $oldquantity = $feed->qtd_prod;
+
+        $feed->vendor_id = $request->vendor;
+        $feed->qtd_prod = $request->quantity;
         
+        if ($feed->save()) {
+            $stock = Stock::where('product_id',$feed->product_id)->first();
+            $stock->qtd_prod -= $oldquantity;
+            $stock->qtd_prod += $request->quantity;
+            $stock->save();
+        }
+
+        return redirect()->route('products.show', $feed->product_id);
     }
 
     /**
