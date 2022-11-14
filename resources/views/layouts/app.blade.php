@@ -9,8 +9,6 @@
     <title>NossaLoja</title>
 </head>
 <body>
-  <header></header>
-
     <main>
         @yield('content')
     </main>

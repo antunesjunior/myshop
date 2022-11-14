@@ -8,12 +8,14 @@
                     <h1>{{ $vendor->name }}</h1>
                     <h3 class="h6">Desde: {{ date('d/m/Y', strtotime($vendor->created_at)) }}</h3>
                     <hr>
-                    <div>
-                        <h3 class="h6">Telefone 1: {{ $vendor->phone[0]->number }}</h3>
-                        <h3 class="h6">Telefone 2: {{ $vendor->phone[1]->number }}</h3>
-                    </div>
                 </header>
-
+            </div>
+            
+            <div class="col-6 me-3">
+                <div>
+                    <h3 class="h6">Telefone 1: {{ $vendor->phone[0]->number }}</h3>
+                    <h3 class="h6">Telefone 2: {{ $vendor->phone[1]->number }}</h3>
+                </div>
                 <div class="controls d-flex mt-4">
                     <div>
                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit">
@@ -27,14 +29,19 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="col-6 me-3">
-                <h2>Histórico</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3>Histórico</h3>
                 <table class="table text-center">
-                    <thead>
+                    <thead class="table-dark">
                         <th>Data</th>
                         <th>Produto</th>
-                        <th>Quantidade</th>
+                        <th>Marca</th>
+                        <th>Qtd entrada</th>
+                        <th>Estado Produto</th>
+                        <th>Estado carregamento</th>
                     </thead>
                     <tbody>
                         @if (!$vendor->feeds->isEmpty())
@@ -45,7 +52,10 @@
                                             {{ date('d/m/Y h:m', strtotime($item->created_at)) }}
                                         </td>
                                         <td>{{ $item->product->name }}</td>
+                                        <td>{{ $item->product->brand }}</td>
                                         <td>{{ $item->qtd_prod }}</td>
+                                        <td>---</td>
+                                        <td>---</td>
                                     </tr>
                                 @endif
                             @endforeach
