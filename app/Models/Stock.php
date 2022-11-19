@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Stock extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'stock';
 
@@ -15,6 +16,6 @@ class Stock extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasOne(Product::class);
     }
 }

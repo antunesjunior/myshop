@@ -47,7 +47,7 @@ class StockFeedController extends Controller
             return back();
         }
 
-        $record = Stock::where('product_id', $request->product)->first();
+        $record = Product::findOrFail($request->product)->stock;
         $record->qtd_prod += $request->quantity;
         
         if ($record->save()) {
@@ -100,14 +100,13 @@ class StockFeedController extends Controller
         ]);
 
         $feed = StockFeed::findOrFail($id);
-
         $oldquantity = $feed->qtd_prod;
 
         $feed->vendor_id = $request->vendor;
         $feed->qtd_prod = $request->quantity;
         
         if ($feed->save()) {
-            $stock = Stock::where('product_id',$feed->product_id)->first();
+            $stock = Product::findOrFail($request->product)->stock;
             $stock->qtd_prod -= $oldquantity;
             $stock->qtd_prod += $request->quantity;
             $stock->save();

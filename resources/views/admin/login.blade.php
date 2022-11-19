@@ -25,7 +25,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('user.auth') }}" method="Post">
+                <form action="{{ route('admin.auth') }}" method="Post">
                     @csrf
                     <div class="mb-3 mb-4">
                         <input type="email" name="email" 

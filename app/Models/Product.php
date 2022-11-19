@@ -18,12 +18,13 @@ class Product extends Model
         'cover',
         'description',
         'vendor_id',
-        'category_id'
+        'category_id',
+        'stock_id'
     ];
 
     public function stock()
     {
-        return $this->hasOne(Stock::class);
+        return $this->belongsTo(Stock::class);
     }
 
     public function stockFeed()

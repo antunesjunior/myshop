@@ -93,10 +93,13 @@ class ProductController extends Controller
         $cover->storeAs('public/products/cover', $coverName);
         $input['cover'] = $coverName;
 
+        $stock = Stock::create();
 
-        $product = Product::create($input);
-        Stock::create(['product_id' => $product->id]);
-
+        if ($stock) {
+            $input['stock_id'] = $stock->id;
+            Product::create($input);
+        }
+        
         return view('admin.products.create-product', [
             'products' => Product::all(),
             'categs' => Category::all()
@@ -179,6 +182,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        $product->stock->delete();
         $product->delete();
         
         return redirect()->route('products.create');

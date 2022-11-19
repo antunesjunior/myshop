@@ -8,12 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    public function login()
+    {
+        return view('login');
+    }
+
+    public function regist()
+    {
+        return view('regist');
+    }
+
     public function loginAdmin()
     {
         return view('admin.login');
     }
 
-    public function authentication(Request $request)
+    public function authUser(Request $request)
     {
         $validate =  $request->validate([
             'email' => ['required', 'email'],
@@ -28,16 +38,46 @@ class LoginController extends Controller
         $request->session()->regenerate();
         $user = User::where('email', $request->email)->first();
 
-        return $user->is_admin = 1 
-                ? redirect()->route('admin.home', $user) 
-                : redirect()->route('test');
+        return redirect()->route('index.home');
     }
 
-    public function logout(Request $request)
+
+    public function authAdmin(Request $request)
+    {
+        $validate =  $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+
+        if (!Auth::attempt($validate)) {
+            return back()->with('alert', 'Email ou senha inválida, verifique os dados!');
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user->is_admin) {
+            return back()->with('alert', 'Nao es um administrador!');
+        }
+
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.home', $user);
+    }
+
+    public function logoutAdmin(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
 
         return redirect()->route('admin.login');
+    }
+
+    public function logoutUser(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+
+        return redirect()->route('index.home');
     }
 }
