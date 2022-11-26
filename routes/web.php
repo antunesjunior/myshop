@@ -38,6 +38,8 @@ Route::post('/user/admin', [LoginController::class, "authAdmin"])->name('admin.a
 Route::get('/user/logout', [LoginController::class, "logoutUser"])->name('user.logout');
 Route::get('/admin/logout', [LoginController::class, "logoutAdmin"])->name('admin.logout');
 
+Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('products.detail');
+
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');

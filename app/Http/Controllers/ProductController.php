@@ -53,6 +53,15 @@ class ProductController extends Controller
         ]);
     }
 
+    public function detail($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return view('product-detail', [
+            'product' => $product
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

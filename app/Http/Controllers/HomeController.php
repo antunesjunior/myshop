@@ -12,11 +12,11 @@ class HomeController extends Controller
     public function home()
     {
         $categories = Category::all();
-        //$recentProducts = Product::all()->orderBy('id', 'desc')->limit(8)->get();
-        //dd(Product::all()->limit(2));
+        $recentProducts = Product::orderBy('id', 'desc')->limit(8)->get();
 
         return view('index', [
-            'categories' => $categories
+            'categories' => $categories,
+            'recentProducts' => $recentProducts
         ]);
     }
 
