@@ -8,17 +8,27 @@
    </header>
 
     <div class="row mt-3">
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
+            <a href="{{ route('pdf.stock') }}" target="_blank" class="btn btn-dark">
+                Relatório de Caixa
+            </a>
+        </div>
+        <div class="col-md-3 mb-4">
+            <a href="{{ route('pdf.stock') }}" target="_blank" class="btn btn-dark">
+                Relatório de de vendas
+            </a>
+        </div>
+        <div class="col-md-3 mb-4">
             <a href="{{ route('pdf.products') }}" target="_blank" class="btn btn-dark">
                 Relatório de Produtos
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
             <a href="{{ route('pdf.vendors') }}" target="_blank" class="btn btn-dark">
                 Relatório de Fornecedores
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
             <a href="{{ route('pdf.stock') }}" target="_blank" class="btn btn-dark">
                 Relatório de Stock
             </a>

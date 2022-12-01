@@ -16,18 +16,20 @@
             @csrf
             <div class="row">
                 <div class="col-4 mb-4">
+                    <label for="">Nome:</label>
                     <input type="text" name="name" 
                             class="form-control" placeholder="Seu nome">
                 </div>
     
                 <div class="col-4 mb-4">
+                    <label for="">Email:</label>
                     <input type="email" name="email" 
                             class="form-control" placeholder="Seu email">
                 </div>
 
                 <div class="col-4 mb-4">
                     <label for="">Sexo:</label>
-                    <select name="gender" class="form-select">
+                    <select name="gender" class="form-control">
                         <option value="m">Masculino</option>
                         <option value="f">Feminino</option>
                     </select>

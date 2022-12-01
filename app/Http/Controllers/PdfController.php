@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockFeed;
@@ -10,12 +11,34 @@ use App\Models\User;
 use App\Models\Vendor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PdfController extends Controller
 {
     public function reports()
     {
         return view('admin.reports');
+    }
+
+    public function invoice($id)
+    {
+        $total = 0;
+        $invoice = Invoice::findOrFail($id);
+
+        foreach ($invoice->shop as $product) {
+            $total += $product->total;
+        }
+
+        $fileName = 'factura '.strtolower(Auth::user()->name);
+        $fileName = $fileName .' '. date('d-m-Y', strtotime($invoice->created_at));
+        $fileName = Str::slug($fileName) ;
+
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'invoice' => $invoice,
+            'total' => $total
+        ]);
+        return $pdf->download("{$fileName}.pdf");
     }
 
     public function products()
@@ -80,9 +103,6 @@ class PdfController extends Controller
                                     ->min('qtd_prod');
         $datas['last_feed_min_prod']['prod']  = StockFeed::where('created_at', 'like', "%{$datas['last_feed_date']}%")
                                     ->where('qtd_prod',  $datas['last_feed_min_prod']['qtd'])->first();
-
-        //dd($datas);
-
 
         $pdf = Pdf::loadView('pdf.stock', ['datas' => $datas]);
         return $pdf->stream('relatorio-stock.pdf');

@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductController;
@@ -48,6 +51,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::post('/products/search', [ProductController::class, "search"])->name('products.search');
 
+    Route::resource('cart', CartController::class);
+    Route::resource('address', AddressController::class);
+    Route::get('/user/shop/{address}', [UserController::class, "shop"])->name('user.shop');
+    Route::get('/user/delive/address', [UserController::class, "addressDeliver"])->name('user.address');
+    Route::get('/user/shop/{address}/checkout', [UserController::class, "checkout"])->name('user.checkout');
+    Route::get('/user/profile', [UserController::class, "profile"])->name('user.profile');
+    Route::put('/user/{id}/update', [UserController::class, "update"])->name('user.update');
+    Route::get('/usuario/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
+
     Route::resource('vendors', VendorController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);
@@ -57,5 +69,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pdf/products', [PdfController::class, 'products'])->name('pdf.products');
     Route::get('/pdf/vendors', [PdfController::class, 'vendors'])->name('pdf.vendors');
     Route::get('/pdf/stock', [PdfController::class, 'stock'])->name('pdf.stock');
+    Route::get('/pdf/invoice/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
     
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,10 @@ class HomeController extends Controller
 
     public function homeAdmin()
     {
-        return view('admin.home', ['admin' => Auth::user()]);
+        $stock = Stock::where('qtd_prod', '<=', 10)->get();
+        return view('admin.home', [
+            'admin' => Auth::user(),
+            'products' => $stock
+        ]);
     }
 }

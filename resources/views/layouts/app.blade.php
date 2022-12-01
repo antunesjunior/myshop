@@ -41,6 +41,7 @@
 
                         <div class="dropdown-menu dropdown-menu-right">
                             @if (Auth::user())
+                            <a href="{{ route('user.profile') }}" class="dropdown-item" type="button">Perfil</a>
                                 <a href="{{ route('user.logout') }}" class="dropdown-item" type="button">Sair</a>
                             @else
                                 <a href="{{ route('user.login') }}" class="dropdown-item" >
@@ -138,9 +139,9 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+                            <a href="{{ route('index.home') }}" class="nav-item nav-link active">Home</a>
+                            <a href="{{ route('index.home') }}" class="nav-item nav-link">Comprar</a>
+                            <a href="{{ route('cart.index') }}" class="nav-item nav-link">Carrinho</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
