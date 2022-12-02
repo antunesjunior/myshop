@@ -8,13 +8,12 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockFeedController;
 use App\Http\Controllers\SupCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
-use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +63,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);
     Route::resource('feeds', StockFeedController::class);
+
+    Route::get('/reports/caixa', [ReportController::class, 'caixa'])->name('reports.caixa');
+    Route::post('/pdf/caixa/year', [PdfController::class, 'caixaYear'])->name('pdf.caixa.year');
+    Route::post('/pdf/caixa/month', [PdfController::class, 'caixaMonth'])->name('pdf.caixa.month');
+    Route::get('/pdf/caixa/day', [PdfController::class, 'caixaDay'])->name('pdf.caixa.day');
+    Route::post('/pdf/caixa/period', [PdfController::class, 'caixaPeriod'])->name('pdf.caixa.period');
 
     Route::get('/pdf/reports', [PdfController::class, 'reports'])->name('pdf.reports');
     Route::get('/pdf/products', [PdfController::class, 'products'])->name('pdf.products');

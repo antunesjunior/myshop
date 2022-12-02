@@ -114,7 +114,8 @@ class UserController extends Controller
         $shop = [];
         $invoice = Invoice::create([
             'user_id' => Auth::id(), 
-            'address_id' => $address
+            'address_id' => $address,
+            'total' => $cart->sum('total')
         ]);
 
         foreach ($cart as $item) {

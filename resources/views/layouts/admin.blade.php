@@ -45,6 +45,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('deliver.index') }}" class="nav-link active" 
+                    aria-current="page" href="#">
+                   Entregas 
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('admin.logout') }}" class="nav-link">Sair</a>
               </li>
             </ul>

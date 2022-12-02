@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DateHelper;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Product;
@@ -21,14 +22,99 @@ class PdfController extends Controller
         return view('admin.reports');
     }
 
+    public function caixaYear(Request $request)
+    {
+        $yearTotal = 0;
+        $monthsTotal = [];
+        $year = $request->year;
+
+        for ($i=1; $i < 13; $i++) { 
+            strlen($i) == 1 ? $date = "{$year}-0{$i}-%" : $date = "{$year}-{$i}-%";
+            $monthsTotal[] = Invoice::where('created_at', 'like', $date)->sum('total');
+        }
+
+       foreach ($monthsTotal as $value) {
+            $yearTotal += $value;
+       }
+
+        $pdf = Pdf::loadView('pdf.caixa.caixa-year', [
+            'months' => DateHelper::getMonths(),
+            'values' => $monthsTotal,
+            'yearTotal' => $yearTotal,
+            'year' => $year
+        ]);
+        return $pdf->stream("nossa-loja-relatorio-caixa-{$year}.pdf");
+    }
+
+    public function caixaMonth(Request $request)
+    {
+        $month = $request->month;
+        $monthsList = DateHelper::getMonths();
+
+        strlen($month) == 1 ? $month = "0{$month}" :'';
+        $date = "{$request->year}-{$month}-%";
+        $monthTotal = Invoice::where('created_at', 'like', $date)->sum('total');
+
+        $fileName = "{$monthsList[$month - 1]}-{$request->year}";
+
+        $pdf = Pdf::loadView('pdf.caixa.caixa-month', [
+            'year' => $request->year,
+            'month' => $monthsList[$month - 1],
+            'ammount' => $monthTotal,
+        ]);
+        return $pdf->stream("nossa-loja-relatorio-caixa-{$fileName}.pdf");
+    }
+
+    public function caixaDay()
+    {
+        $default = date('Y-m-d');
+        $format = date('d-m-Y');
+        $toDay = Invoice::whereDate('created_at', $default)->sum('total');
+
+        $pdf = Pdf::loadView('pdf.caixa.caixa-day', [
+            'date' => $format,
+            'ammount' => $toDay,
+        ]);
+        return $pdf->stream("nossa-loja-relatorio-caixa-de-{$format}.pdf");
+    }
+
+    public function caixaPeriod(Request $request)
+    {
+        $request->validate([
+            "from" => ['required', 'date'],
+            "to" => ['required', 'date'],
+        ]);
+
+        $from = date_create($request->from);
+        $to = date_create($request->to);
+        $now = date_create();
+        $fromFormat = date('d-m-Y', strtotime($request->from));
+        $toFormat = date('d-m-Y', strtotime($request->to));
+
+        if ((date_diff($now, $from)->invert == 0) || (date_diff($now, $to)->invert == 0)) {
+            dd('As datas nao podem ser maiores que a data actual');
+        }
+
+        if (date_diff($from, $to)->invert == 1) {
+            dd('A data de inicio tem de ser menor que a data final');
+        }
+
+        $result = Invoice::whereDate('created_at',">=", $request->from)
+            ->whereDate('created_at', "<=", $request->to)->sum('total');
+
+        $pdf = Pdf::loadView('pdf.caixa.caixa-period', [
+            'from' => $fromFormat,
+            'to' => $toFormat,
+            'ammount' => $result
+        ]);
+        return $pdf->stream("nossa-loja-relario-caixa-{$fromFormat}-a-{$toFormat}.pdf");
+    }
+
+
     public function invoice($id)
     {
-        $total = 0;
         $invoice = Invoice::findOrFail($id);
-
-        foreach ($invoice->shop as $product) {
-            $total += $product->total;
-        }
+        $total = $invoice->shop->sum('total');
 
         $fileName = 'factura '.strtolower(Auth::user()->name);
         $fileName = $fileName .' '. date('d-m-Y', strtotime($invoice->created_at));
@@ -38,7 +124,7 @@ class PdfController extends Controller
             'invoice' => $invoice,
             'total' => $total
         ]);
-        return $pdf->download("{$fileName}.pdf");
+        return $pdf->download("nossa-loja-{$fileName}.pdf");
     }
 
     public function products()
@@ -51,7 +137,7 @@ class PdfController extends Controller
         $datas['all_category'] = Category::all()->count();
 
         $pdf = Pdf::loadView('pdf.products', ['datas' => $datas]);
-        return $pdf->stream('relatorio-produtos.pdf');
+        return $pdf->stream('nossa-loja-relatorio-produtos.pdf');
     }
 
     public function vendors()
@@ -65,7 +151,7 @@ class PdfController extends Controller
         $datas['min_vendor_prod']  = StockFeed::all()->groupBy('vendor_id')->min()->count();
 
         $pdf = Pdf::loadView('pdf.vendors', ['datas' => $datas]);
-        return $pdf->stream('relatorio-fornecedores.pdf');
+        return $pdf->stream('nossa-loja-relatorio-fornecedores.pdf');
 
     }
 

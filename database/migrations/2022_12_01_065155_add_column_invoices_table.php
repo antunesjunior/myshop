@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
+            $table->unsignedBigInteger('total');
             $table->foreignId('address_id')->constrained();
+            $table->softDeletes();
          });
     }
 
@@ -27,6 +29,8 @@ return new class extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             $table->dropConstrainedForeignId('address_id');
+            $table->dropColumn('total');
+            $table->dropSoftDeletes();
         });
     }
 };
