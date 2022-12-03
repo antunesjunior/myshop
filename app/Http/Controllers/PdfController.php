@@ -22,6 +22,19 @@ class PdfController extends Controller
         return view('admin.reports');
     }
 
+    public function deliver($invoice)
+    {
+        $invoice = Invoice::findOrFail($invoice);
+        $user = Str::slug($invoice->user->name);
+        $date = date('d-m-Y', strtotime($invoice->created_at));
+
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'invoice' => $invoice,
+            'total' => $invoice->shop->sum('total')
+        ]);
+        return $pdf->stream("nossa-loja-entrega-{$user}-{$date}.pdf");
+    }
+
     public function caixaYear(Request $request)
     {
         $yearTotal = 0;

@@ -49,7 +49,7 @@
                                 @if (isset($item->product))
                                     <tr>
                                         <td>
-                                            {{ date('d-m-Y h:m', strtotime($item->created_at)) }}
+                                            {{ date('d-m-Y H:i', strtotime($item->created_at)) }}
                                         </td>
                                         <td>{{ $item->product->name }}</td>
                                         <td>{{ $item->product->brand }}</td>

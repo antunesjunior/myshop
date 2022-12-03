@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class DeliverController extends Controller
@@ -13,7 +14,13 @@ class DeliverController extends Controller
      */
     public function index()
     {
-        //
+        $pending = Invoice::where('status', 0)->orderBy('id', 'desc')->get();
+        $dispatched = Invoice::where('status', 1)->orderBy('id', 'desc')->get();
+
+        return view('admin.deliver', [
+            'pending' => $pending,
+            'dispatched' => $dispatched,
+        ]);
     }
 
     /**
@@ -45,7 +52,11 @@ class DeliverController extends Controller
      */
     public function show($id)
     {
-        //
+       $deliver = Invoice::findOrFail($id);
+       $deliver->status = 1;
+       $deliver->save();
+
+       return back();
     }
 
     /**
@@ -56,7 +67,11 @@ class DeliverController extends Controller
      */
     public function edit($id)
     {
-        //
+        $deliver = Invoice::findOrFail($id);
+        $deliver->status = 2;
+        $deliver->save();
+ 
+        return back();
     }
 
     /**

@@ -9,7 +9,7 @@
     <title>NossaLoja</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-light py-3">
+    <nav class="navbar navbar-expand-lg bg-light py-2">
         <div class="container">
           <a class="d-block navbar-brand" href="#">
                 <h2>MinhaLoja</h2>
@@ -21,33 +21,32 @@
   
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a href="{{ route('admin.home') }}" class="nav-link active" aria-current="page" href="#">Home</a>
+                <a href="{{ route('admin.home') }}" class="nav-link">Home</a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('products.create') }}" class="nav-link active" aria-current="page" href="#">Produtos</a>
+                <a href="{{ route('products.create') }}" class="nav-link">Produtos</a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('categories.create') }}" class="nav-link active" 
-                    aria-current="page" href="#">
+                <a href="{{ route('categories.create') }}" class="nav-link">
                   Categorias
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('vendors.create') }}" class="nav-link active" 
-                    aria-current="page" href="#">
+                <a href="{{ route('vendors.create') }}" class="nav-link">
                   Fornecedores
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('pdf.reports') }}" class="nav-link active" 
-                    aria-current="page" href="#">
+                <a href="{{ route('pdf.reports') }}" class="nav-link">
                   Relatórios 
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('deliver.index') }}" class="nav-link active" 
-                    aria-current="page" href="#">
+                <a href="{{ route('deliver.index') }}" class="btn btn-sm btn-primary position-relative">
                    Entregas 
+                   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {{ \App\Models\Invoice::where('status', 0)->count() }}
+                   </span>
                 </a>
               </li>
               <li class="nav-item">

@@ -76,7 +76,7 @@
             <small>
                 <i>
                     Nossa loja - Todos os direitos reservados <br>
-                    Arquivo emitido em: {{ date('d-m-Y H:m') }}
+                    Arquivo emitido em: {{ date('d-m-Y H:i') }}
                 </i>
             </small>
         </p>

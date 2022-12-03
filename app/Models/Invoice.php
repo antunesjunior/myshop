@@ -14,7 +14,12 @@ class Invoice extends Model
 
     public function shop()
     {
-        return $this->hasMany(shop::class);
+        return $this->hasMany(Shop::class);
+    }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
     }
 
     public function user()

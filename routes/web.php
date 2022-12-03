@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DeliverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
@@ -60,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuario/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
 
     Route::resource('vendors', VendorController::class);
+    Route::resource('deliver', DeliverController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);
     Route::resource('feeds', StockFeedController::class);
@@ -71,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pdf/caixa/period', [PdfController::class, 'caixaPeriod'])->name('pdf.caixa.period');
 
     Route::get('/pdf/reports', [PdfController::class, 'reports'])->name('pdf.reports');
+    Route::get('/pdf/deliver/{id}', [PdfController::class, 'deliver'])->name('pdf.deliver');
     Route::get('/pdf/products', [PdfController::class, 'products'])->name('pdf.products');
     Route::get('/pdf/vendors', [PdfController::class, 'vendors'])->name('pdf.vendors');
     Route::get('/pdf/stock', [PdfController::class, 'stock'])->name('pdf.stock');

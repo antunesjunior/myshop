@@ -16,6 +16,7 @@
                         <th>Marca</th>
                         <th>Preço (kz)</th>
                         <th>stock</th>
+                        <th>Montra</th>
                     </thead>
                     <tbody>
                         <tr>
@@ -23,6 +24,7 @@
                             <td>{{ $product->brand }}</td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->stock->qtd_prod }}</td>
+                            <td>Sim</td>
                         </tr>
                     </tbody>
                 </table>
@@ -34,20 +36,30 @@
                         {{ $product->description }}
                     </p>
                 </article>
-
+                <hr>
                 <div class="controls d-flex">
                     <div>
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fill">
+                        <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#fill">
+                            Relatorio
+                        </button>
+                    </div>
+                    <div class="px-3">
+                        <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#fill">
+                            Historico de alteracao
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#fill">
                             Abastecer
                         </button>
                     </div>
                     <div class="px-3">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit">
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#edit">
                             Editar
                         </button>
                     </div>
                     <div>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
                             Eliminar
                         </button>
                     </div>
@@ -64,7 +76,7 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">
                 Abastercer: {{ $product->name }} {{ $product->brand }}
             </h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn btn-sm-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('feeds.store') }}" method="post">
@@ -102,8 +114,8 @@
                     @endif
                     
                     <div class="controls pt-5">
-                        <input type="submit" value="Confirmar" class="btn btn-primary">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <input type="submit" value="Confirmar" class="btn btn-sm btn-primary">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                             Cancelar
                         </button>
                     </div>
@@ -121,7 +133,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">
                     Ultimo carregamento de: {{ $product->name }} {{ $product->brand }}
                 </h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-sm-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('feeds.update', $lastFeed->id) }}" method="POST">
@@ -156,9 +168,9 @@
                         </div>
                         
                         <div class="controls pt-5">
-                            <input type="submit" value="Editar" class="btn btn-primary">
+                            <input type="submit" value="Editar" class="btn btn-sm btn-primary">
                             <button type="button" 
-                                class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#fill">
+                                class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#fill">
                                 Cancelar
                             </button>
                         </div>
@@ -176,7 +188,7 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">
                 Editar: {{ $product->name }} {{ $product->brand }}
             </h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn btn-sm-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('products.update', $product->id) }}" 
@@ -229,8 +241,8 @@
                     </div>
 
                     <div class="controls pt-4">
-                        <input type="submit" value="Confirmar" class="btn btn-primary">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <input type="submit" value="Confirmar" class="btn btn-sm btn-primary">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                             Cancelar
                         </button>
                     </div>
@@ -247,7 +259,7 @@
               <h1 class="modal-title fs-5" id="exampleModalLabel">
                 {{ $product->name }} {{ $product->brand }}
             </h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn btn-sm-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -258,8 +270,8 @@
                         Deseja realmente apagar este produto?
                     </h4>
                     <div class="controls pt-4">
-                        <input type="submit" value="Confirmar" class="btn btn-primary">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <input type="submit" value="Confirmar" class="btn btn-sm btn-primary">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                             Cancelar
                         </button>
                     </div>

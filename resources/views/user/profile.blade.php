@@ -25,17 +25,30 @@
                 <thead class="table-head table-dark">
                     <th>Data</th>
                     <th>Produtos diferentes</th>
-                    <th>Montante Pago</th> 
+                    <th>Montante Pago</th>
+                    <th>Estado</th> 
                     <th>#</th>                                       
                 </thead>
                 <tbody>
                     @foreach ($invoices as $item)
                         <tr>
-                            <td>{{ date('d-m-Y H:m', strtotime($item->created_at)) }}</td>
+                            <td>{{ date('d-m-Y H:i', strtotime($item->created_at)) }}</td>
                             <td>{{ $item->shop->count() }}</td>
                             <td>{{ $item->shop->sum('total')}} kz(s)</td>
                             <td>
-                                <a href="{{ route('invoice.show', $item->id) }}" class="btn btn-dark">
+                                @switch($item->status)
+                                    @case(0)
+                                        Pendente
+                                        @break
+                                    @case(1)
+                                        Despachado
+                                        @break
+                                    @default
+                                        Resolvido
+                                @endswitch
+                            </td>
+                            <td>
+                                <a href="{{ route('invoice.show', $item->id) }}" class="btn btn-sm btn-dark">
                                     ver
                                 </a>
                             </td>
