@@ -46,7 +46,7 @@
                 
                 <div class="py-2">
                     <label for="" class="form-label">Descrição do produto</label>
-                    <textarea class="form-control" name="description" id="" cols="30" rows="3"></textarea>
+                    <textarea class="form-control" name="description" id="" cols="30" rows="3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum debitis consectetur esse corrupti, porro iure deserunt cupiditate est! Quis dignissimos excepturi optio voluptatem nulla quos ab corporis aperiam beatae mollitia!</textarea>
                 </div>
 
                 <input type="submit" value="Cadastrar producto" class="btn btn-secondary">
@@ -57,18 +57,11 @@
             <form action="{{ route('products.search') }}" method="POST" class="my-2">
                 @csrf
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-6">
                         <input type="text" name="value" class="form-control"
                                 placeholder="pesquisar...">
                     </div>
-                    <div class="col-4 d-flex align-items-center">
-                        <label for="select" class="form-label">Por:</label>
-                        <select name="key" id="select" class="form-control mx-2">
-                            <option value="code">Código</option>
-                            <option value="name">Nome</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <input type="submit" value="pesquisar" class="btn btn-light">
                     </div>
                 </div>
@@ -100,7 +93,7 @@
                             <td>{{ $item->price }}</td>
                             <td>
                                 <a href="{{ route('products.show', $item->id) }}"
-                                    class="btn btn-light">
+                                    class="btn btn-secondary">
                                 Detalhes
                                 </a>
                             </td>
@@ -109,6 +102,8 @@
                     @endif
                 </tbody>
             </table>
+
+            {{ $products->links() }}
         </div>
     </div>
 </div>

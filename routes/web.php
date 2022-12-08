@@ -30,18 +30,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, "home"])->name('index.home');
 
-Route::get('/user/login', [LoginController::class, "login"])->name('user.login');
-Route::get('/user/create', [LoginController::class, "regist"])->name('user.create');
 Route::post('/user/create', [UserController::class, "store"])->name('user.store');
 Route::get('/admin/login', [LoginController::class, "loginAdmin"])->name('admin.login');
 
-Route::post('/user/auth', [LoginController::class, "authUser"])->name('user.auth');
-Route::post('/user/admin', [LoginController::class, "authAdmin"])->name('admin.auth');
+Route::post('/user/auth', [LoginController::class, "authUser"])->name('user.login');
+Route::post('/user/admin', [LoginController::class, "authAdmin"])->name('admin.login');
 
 Route::get('/user/logout', [LoginController::class, "logoutUser"])->name('user.logout');
 Route::get('/admin/logout', [LoginController::class, "logoutAdmin"])->name('admin.logout');
 
+Route::post('/produto/search/public', [ProductController::class, "searchPub"])->name('products.spub');
+Route::get('/produto/categoria/{id}', [ProductController::class, "catalogCat"])->name('products.categs');
 Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('products.detail');
+Route::get('/produto/catalogo', [ProductController::class, "catalog"])->name('products.catalog');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -66,7 +67,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('supcategs', SupCategoryController::class);
     Route::resource('feeds', StockFeedController::class);
 
+   
+    Route::get('/reports/sale', [ReportController::class, 'sale'])->name('reports.sale');
+
     Route::get('/reports/caixa', [ReportController::class, 'caixa'])->name('reports.caixa');
+
+    Route::post('/reports/sell', [PdfController::class, 'saleYear'])->name('pdf.sale.year');
     Route::post('/pdf/caixa/year', [PdfController::class, 'caixaYear'])->name('pdf.caixa.year');
     Route::post('/pdf/caixa/month', [PdfController::class, 'caixaMonth'])->name('pdf.caixa.month');
     Route::get('/pdf/caixa/day', [PdfController::class, 'caixaDay'])->name('pdf.caixa.day');

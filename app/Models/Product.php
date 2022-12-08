@@ -19,7 +19,9 @@ class Product extends Model
         'description',
         'vendor_id',
         'category_id',
-        'stock_id'
+        'stock_id',
+        'detach',
+        'show'
     ];
 
     public function stock()
@@ -35,6 +37,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public static function getjoinStock()
+    {
+        return self::join('stock', 'products.id', '=', 'stock.id')->where('show', 1)->where('qtd_prod', '>', '20');
     }
     
 }

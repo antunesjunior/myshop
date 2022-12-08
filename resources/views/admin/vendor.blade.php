@@ -14,14 +14,14 @@
                 </div>
                 <div class="row pb-2">
                     <div class="col-6">
-                        <label class="form-label">Telefone 1</label>
+                        <label class="form-label"><i class="fas fa-phone-square-alt"></i> Telefone 1</label>
                         <input type="text" name="phone_1" class="form-control"
-                                placeholder="+244 xxx xxx xxx">
+                                placeholder="+244 xxx xxx xxx" value="947288201">
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Telefone 2</label>
+                        <label class="form-label"><i class="fas fa-phone-square-alt"></i> Telefone 2</label>
                         <input type="text" name="phone_2" class="form-control" 
-                            placeholder="+244 xxx xxx xxx">
+                            placeholder="+244 xxx xxx xxx" value="930036767">
                     </div>
                 </div>
 
@@ -32,16 +32,9 @@
         <div class="col-md-7 offset-1">
             <form action="#" method="get" class="my-2">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-8">
                         <input type="text" name="search" class="form-control"
                                 placeholder="pesquisar...">
-                    </div>
-                    <div class="col-4 d-flex align-items-center">
-                        <label for="select" class="form-label">Por:</label>
-                        <select name="by" id="select" class="form-control mx-2">
-                            <option value="#">Código</option>
-                            <option value="#">Nome</option>
-                        </select>
                     </div>
                     <div class="col-4">
                         <input type="submit" value="pesquisar" class="btn btn-light">
@@ -51,7 +44,6 @@
 
             <table class="table text-center mt-3">
                 <thead class="table-dark">
-                    <th>Código</th>
                     <th>Nome</th>
                     <th>Telefone-1</th>
                     <th>Telefone-2</th>
@@ -60,7 +52,6 @@
                 <tbody>
                     @foreach ($vendors as $item)
                     <tr>
-                        <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->phone[0]->number }}</td>
                         <td>{{ $item->phone[1]->number }}</td>
@@ -74,6 +65,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $vendors->links() }}
         </div>
     </div>
 </div>

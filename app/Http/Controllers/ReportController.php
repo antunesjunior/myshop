@@ -20,4 +20,17 @@ class ReportController extends Controller
             'months' => $months
         ]);
     }
+
+    public function sale()
+    {
+        $years = range(2021, (date("Y")));
+        $months = DateHelper::getMonths();
+        $yearLimit = array_search(date('Y'), $years);
+       
+        return view('admin.reports.sale', [
+            'years' => $years,
+            'limit' => $yearLimit,
+            'months' => $months
+        ]);
+    }
 }

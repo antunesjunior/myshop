@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\SupCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -25,9 +26,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $cat =  Category::paginate($perPage = 6, $columns = ['*'], $pageName = 'cat');
+        $sup = SupCategory::paginate($perPage = 6, $columns = ['*'], $pageName = 'supcat');
+
         return view('admin.categories', [
-            'categs' => Category::all(),
-            'supCategs' => SupCategory::all()
+            'categs' =>$cat,
+            'supCategs' => $sup
         ]);
     }
 
@@ -41,6 +45,7 @@ class CategoryController extends Controller
     {
         $inputs = $request->validate([
             'name' => ['required'],
+            'cover' => ['file'],
             'sup_category_id' => ['required']
         ]);
 
@@ -48,11 +53,18 @@ class CategoryController extends Controller
             unset($inputs['sup_category_id']);
         }
 
-        Category::create($inputs);
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover');
+            $coverName = $cover->hashName();
+            $cover->storeAs('public/categories/cover', $coverName);
+            $input['cover'] = $coverName;
+        }
 
-        return view('admin.categories', [
-            'categs' => Category::all(),
-            'supCategs' => SupCategory::all()
+        $cat = Category::create($inputs);
+
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>"Categoria {$cat->name} criada com successo!"
         ]);
     }
 
@@ -64,7 +76,12 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $cat = Category::findOrFail($id);
+        $supCat = SupCategory::paginate();
+        return view('admin.category-show', [
+            'category' => $cat,
+            'supCategs' => $supCat
+        ]);
     }
 
     /**
@@ -87,7 +104,32 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->validate([
+            'name' => ['required'],
+            'cover' => ['file'],
+            'sup_category_id' => ['required']
+        ]);
+
+        if ($request->input('sup_category_id') == 0) {
+            $input['sup_category_id'] = null;
+        }
+
+        $cat = Category::findOrFail($id);
+
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover');
+            $coverName = $cover->hashName();
+            $cover->storeAs('public/categories/cover', $coverName);
+            $input['cover'] = $coverName;
+
+            Storage::delete("public/categories/cover/{$cat->cover}");
+        }
+
+        $cat->fill($input)->save();
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>'Categoria actualizada com successo!'
+        ]);
     }
 
     /**
@@ -98,6 +140,22 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        $cat = Category::findOrFail($id);
+
+        if ($cat->products->count() > 0) {
+            return back()->with('alert', [
+                "type" =>'danger',
+                "message" =>'Não pode ser deletado. Há productos associados a esta categoria'
+            ]);
+        }
+
+        $cat->delete();
+        Storage::delete("public/products/cover/{$cat->cover}");
+
+        return redirect()->route('categories.create')->with('alert', [
+            "type" =>'success',
+            "message" =>"Categoria {$cat->name} eliminada!"
+        ]);
     }
 }

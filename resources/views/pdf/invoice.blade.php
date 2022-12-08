@@ -18,7 +18,7 @@
 <header class="header-invoice">
     <div class="header-date">
         <small>
-            <i>Data da compra: {{ date('d-m-Y H:m', strtotime($invoice->created_at)) }}</i>
+            <i>Data da compra: {{ date('d-m-Y H:i', strtotime($invoice->created_at)) }}</i>
         </small>
     </div>
     <div class="header-content mb-3 border p-3">

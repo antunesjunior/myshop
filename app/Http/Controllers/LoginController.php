@@ -30,15 +30,17 @@ class LoginController extends Controller
             'password' => ['required']
         ]);
 
-
         if (!Auth::attempt($validate)) {
-            return back()->with('alert', 'Email ou senha inválida, verifique os dados!');
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => 'Email ou senha inválida, verifique os dados!'
+            ]);
         }
 
         $request->session()->regenerate();
         $user = User::where('email', $request->email)->first();
 
-        return redirect()->route('index.home');
+        return back();
     }
 
 
@@ -49,20 +51,25 @@ class LoginController extends Controller
             'password' => ['required']
         ]);
 
-
         if (!Auth::attempt($validate)) {
-            return back()->with('alert', 'Email ou senha inválida, verifique os dados!');
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => 'Email ou senha inválida, verifique os dados!'
+            ]);
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user->is_admin) {
-            return back()->with('alert', 'Nao es um administrador!');
+            return back()->with('alert', [
+                'type' => 'danger',
+                'message' => 'Não és um administrador'
+            ]);
         }
 
         $request->session()->regenerate();
 
-        return redirect()->route('admin.home', $user);
+        return redirect()->route('admin.home');
     }
 
     public function logoutAdmin(Request $request)
@@ -70,7 +77,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('index.home');
     }
 
     public function logoutUser(Request $request)

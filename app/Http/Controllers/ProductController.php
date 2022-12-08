@@ -18,34 +18,52 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function catalog()
     {
-        //
+        $products = Product::getjoinStock()->inRandomOrder()->paginate(21);
+        return view('shop', [
+            'products' => $products,
+            'catName' => "Todos Categorias"
+        ]);
+    }
+
+    public function catalogCat($id)
+    {
+        $cat = Category::findOrFail($id);
+
+        return view('shop', [
+            'products' => $cat->products()->join('stock', 'products.id', '=', 'stock.id')->where('show', 1)->where('qtd_prod', '>', 20)->paginate(21),
+            'catName' => $cat->name
+        ]);
+    }
+
+    public function searchPub(Request $request)
+    {
+        $request->validate([
+            'value' => 'required',
+        ]);
+
+        $result = Product::getjoinStock()->where('name', 'LIKE',"%{$request->value}%")->paginate(21);
+
+        return view('shop', [
+            'products' => $result,
+            'catName'  => "Resultados da pesquisa por '{$request->value}'"
+        ]);
     }
 
     public function search(Request $request)
     {
         $request->validate([
             'value' => 'required',
-            'key' => 'required',
         ]);
 
-        switch ($request->key) {
-            case 'code':
-                $result = Product::where('id', $request->value)->get();
-                break;
-
-            case 'name':
-                $result = Product::where('name', 'LIKE',"%{$request->value}%")->get();
-                break;
-
-            default:
-                return back();
-                break;
-        }
+        $result = Product::where('name', 'LIKE',"%{$request->value}%")->where('show', 1)->paginate(8);
 
         $message = "Total de resultados da pesquisa por '{$request->value}': {$result->count()}";
-        session()->flash('message', $message);
+        session()->flash('alert', [
+            'type' => 'info',
+            'message' => $message
+        ]);
 
         return view('admin.products.create-product', [
             'products' => $result,
@@ -70,7 +88,7 @@ class ProductController extends Controller
     public function create()
     {
         return view('admin.products.create-product', [
-            'products' => Product::all(),
+            'products' => Product::paginate(8),
             'categs' => Category::all()
         ]);
     }
@@ -109,10 +127,7 @@ class ProductController extends Controller
             Product::create($input);
         }
         
-        return view('admin.products.create-product', [
-            'products' => Product::all(),
-            'categs' => Category::all()
-        ]);
+        return redirect()->route('products.create');
     }
 
     /**
@@ -160,11 +175,13 @@ class ProductController extends Controller
             'description' => ['required'],
             'cover' => ['nullable', 'file'],
             'price' => ['required', 'numeric'],
-            'category_id' => ['required', 'numeric']
+            'detach' => ['required', 'numeric'],
+            'category_id' => ['required', 'numeric'],
+            'show' => ['required', 'numeric'],
         ]);
 
         if ($request->input('category_id') == 0) {
-            unset($input['category_id']);
+            $input['category_id'] = null;
         }
 
         $product = Product::findOrFail($id);
@@ -179,7 +196,10 @@ class ProductController extends Controller
         }
 
         $product->fill($input)->save();
-        return redirect()->route('products.show', $product->id);
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>"Produto actualizado com successo!"
+        ]);
     }
 
     /**

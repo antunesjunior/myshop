@@ -4,15 +4,13 @@
 
 <div class="container-lg">
     <div class="row mt-3">
-        <div class="col-md-6">
+        <div class="col-6">
             <h2 class="mb-4">Categorias</h2>
-
             <form action="{{ route('categories.store') }}" method="post"
                 enctype="multipart/form-data">
                 @csrf
-    
                 <div class="row pb-2">
-                    <div class="col-5">
+                    <div class="col-6">
                         <label for="" class="form-label">Nome da Categoria</label>
                         <input type="text" name="name" class="form-control">
                     </div>
@@ -30,7 +28,10 @@
                         </select>
                     </div>
                 </div>
-
+                <div class="mb-3">
+                    <label for="" class="form-label">Imagem (não obrigatório)</label>
+                    <input type="file" name="cover" class="form-control">
+                </div>
                 <input type="submit" value="Criar categoria" class="btn btn-secondary">
             </form>
             <table class="table text-center">
@@ -49,7 +50,7 @@
                             <td>{{ $item->products()->count() }}</td>
                             <td>
                                 <a href="{{ route('categories.show', $item->id) }}"
-                                    class="btn btn-light">
+                                    class="btn btn-secondary">
                                 Detalhes
                                 </a>
                             </td>
@@ -58,6 +59,8 @@
                     @endif
                 </tbody>
             </table>
+
+            {{ $categs->links() }}
         </div>
 
         <div class="col-md-5 offset-1">
@@ -79,7 +82,7 @@
                 <thead class="thead-dark">
                     <th>codigo</th>
                     <th>Nome</th>
-                    <th>Qtd de Categorias</th>
+                    <th>Qtd de Catrg</th>
                 </thead>
                 <tbody>
                     @if (!$supCategs->isEmpty())
@@ -89,8 +92,8 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->categories()->count() }}</td>
                             <td>
-                                <a href="{{ route('categories.show', $item->id) }}"
-                                    class="btn btn-light">
+                                <a href="{{ route('supcategs.show', $item->id) }}"
+                                    class="btn btn-secondary">
                                 Detalhes
                                 </a>
                             </td>
@@ -99,8 +102,8 @@
                     @endif
                 </tbody>
             </table>
+            {{ $supCategs->links() }}
         </div>
-
     </div>
 </div>
 @endsection

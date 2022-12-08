@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link href="{{ asset('css/all.css') }}" rel="stylesheet">
+
     <link href="{{ asset('lib/animate/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
 
@@ -13,12 +15,139 @@
     <title>NossaLoja</title>
 </head>
 <body>
+    <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <i class="fas fa-user-plus"></i> Registrar
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('user.store') }}" method="POST">
+                @csrf
+                @method('POST')
+    
+                <div>
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="name" class="form-control">
+                </div>
+    
+                <div class="my-4">
+                    <label class="form-label">Email</label>
+                   <input type="text" name="email" class="form-control">
+                </div>
+    
+                <div>
+                    <label class="form-label">Sexo</label>
+                    <select name="gender" class="form-control">
+                       <option value="m">Masculino</option>
+                       <option value="f">Feminino</option>
+                    </select>
+                </div>
+                <div class="row my-4">
+                    <div class="col-6">
+                        <label class="form-label">Telefone - 1</label>
+                       <input type="text" name="phone_1" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Telefone - 2</label>
+                       <input type="text" name="phone_2" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-4">
+                        <input type="password" name="password" 
+                            class="form-control" placeholder="Sua senha">
+                    </div>
+        
+                    <div class="col-6 mb-4">
+                        <input type="password" name="password_confirmation" 
+                        class="form-control" placeholder="Confirmar senha">
+                    </div>
+                </div>
+                <div class="modal-footer border-none">
+                    <button class="btn btn-primary">Submeter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <i class="fas fa-sign-in-alt"></i> Login
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('user.login') }}" method="POST">
+                @csrf
+                @method('POST')
+                <div class="my-4">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                   <input type="text" name="email" class="form-control">
+                </div>
+                <div class="my-4">
+                    <label class="form-label"><i class="fas fa-lock"></i> Senha</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+               
+                <div class="modal-footer border-none">
+                    <button class="btn btn-primary">Submeter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="admin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <i class="fas fa-user-lock"></i> Administrador
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('admin.login') }}" method="POST">
+                @csrf
+                @method('POST')
+                <div class="my-4">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                   <input type="email" name="email" class="form-control">
+                </div>
+                <div class="my-4">
+                    <label class="form-label"><i class="fas fa-lock"></i> Senha</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+               
+                <div class="modal-footer border-none">
+                    <button class="btn btn-primary">Submeter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-                    <a class="text-body mr-3" href="">Sobre nos</a>
                     <a class="text-body mr-3" href="">Ajuda</a>
                     <a class="text-body mr-3" href="">FAQs</a>
                 </div>
@@ -28,8 +157,9 @@
                 @if (Auth::user())
                 <div class="d-inline-flex align-items-center h-100 mx-2">
                     <p class="h6">
+                        <i class="fas fa-user"></i>
                         <b>
-                            Cliente: {{ Auth::user()->name }}
+                            {{ Auth::user()->name }}
                         </b>
                     </p>
                 </div>
@@ -41,21 +171,25 @@
 
                         <div class="dropdown-menu dropdown-menu-right">
                             @if (Auth::user())
-                            <a href="{{ route('user.profile') }}" class="dropdown-item" type="button">Perfil</a>
-                                <a href="{{ route('user.logout') }}" class="dropdown-item" type="button">Sair</a>
-                            @else
-                                <a href="{{ route('user.login') }}" class="dropdown-item" >
-                                    Login
+                            <a href="{{ route('user.profile') }}" class="dropdown-item" type="button">
+                               <i class="fas fa-user"></i> Perfil
+                            </a>
+                                <a href="{{ route('user.logout') }}" class="dropdown-item" type="button">
+                                   <i class="fas fa-sign-out-alt"></i> Sair
                                 </a>
-                                <a href="{{ route('user.create') }}" class="dropdown-item" type="button">
-                                    Criar Conta
+                            @else
+                                <a href="#" class="dropdown-item" type="button" data-toggle="modal" data-target="#login">
+                                  <i class="fas fa-sign-in-alt"></i> Login
+                                </a>
+                                <a href="#" class="dropdown-item" type="button" data-toggle="modal" data-target="#create">
+                                  Criar Conta
                                 </a>
                             @endif
                         </div>
                     </div>
 
                     <div class="btn-group mx-2">
-                        <a href="{{ route('admin.login') }}" target="_blank" type="button" class="btn btn-sm btn-light">
+                        <a href="#" target="_blank" type="button" class="btn btn-sm btn-light" type="button" data-toggle="modal" data-target="#admin">
                             Admin
                         </a>
                     </div>
@@ -72,6 +206,13 @@
             </div>
         </div>
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+            @if (session()->get('alert'))
+                @include('shared.alert', [
+                    'type' => session()->get('alert')['type'],
+                    'message' => session()->get('alert')['message']
+                ])
+            @endif
+            
             <div class="col-lg-4">
                 <a href="{{ route('index.home') }}" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Nossa</span>
@@ -79,20 +220,21 @@
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
-                <form action="">
+                <form action="{{ route('products.spub') }}" method="POST">
+                    @csrf
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Pesquisar por Produtos">
+                        <input type="text" name="value" class="form-control" placeholder="Pesquisar por Produtos">
                         <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
+                            <button class="input-group-text bg-transparent text-primary">
                                 <i class="fa fa-search"></i>
-                            </span>
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Apoio ao Cliente</p>
-                <h5 class="m-0">+244 912 345 689</h5>
+                <h5 class="m-0">+244 930 036 767</h5>
             </div>
         </div>
     </div>
@@ -108,23 +250,27 @@
                 </a>
                 <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
                     <div class="navbar-nav w-100">
-                        <div class="nav-item dropdown dropright">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dresses <i class="fa fa-angle-right float-right mt-1"></i></a>
-                            <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
-                                <a href="" class="dropdown-item">Men's Dresses</a>
-                                <a href="" class="dropdown-item">Women's Dresses</a>
-                                <a href="" class="dropdown-item">Baby's Dresses</a>
-                            </div>
-                        </div>
-                        <a href="" class="nav-item nav-link">Shirts</a>
-                        <a href="" class="nav-item nav-link">Jeans</a>
-                        <a href="" class="nav-item nav-link">Swimwear</a>
-                        <a href="" class="nav-item nav-link">Sleepwear</a>
-                        <a href="" class="nav-item nav-link">Sportswear</a>
-                        <a href="" class="nav-item nav-link">Jumpsuits</a>
-                        <a href="" class="nav-item nav-link">Blazers</a>
-                        <a href="" class="nav-item nav-link">Jackets</a>
-                        <a href="" class="nav-item nav-link">Shoes</a>
+                        @php
+                        $cats = \App\Models\Category::whereNull('sup_category_id')->get();
+                        $sup = \App\Models\SupCategory::all();
+                    
+                        @endphp
+                        <a href="{{ route('products.catalog') }}" class="nav-item nav-link">Todos</a>
+                        @foreach ($sup as $item)
+                            @if (!$item->categories->isEmpty())
+                                <div class="nav-item dropdown dropright">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ $item->name }} <i class="fa fa-angle-right float-right mt-1"></i></a>
+                                    <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+                                        @foreach ($item->categories as $cat)
+                                            <a href="{{ route('products.categs', $cat->id) }}" class="dropdown-item">{{ $cat->name }}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                        @foreach ($cats as $item)
+                            <a href="{{ route('products.categs', $item->id) }}" class="nav-item nav-link">{{ $item->name }}</a>
+                        @endforeach
                     </div>
                 </nav>
             </div>
@@ -139,17 +285,21 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="{{ route('index.home') }}" class="nav-item nav-link active">Home</a>
-                            <a href="{{ route('index.home') }}" class="nav-item nav-link">Comprar</a>
-                            <a href="{{ route('cart.index') }}" class="nav-item nav-link">Carrinho</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
-                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
-                                </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a href="{{ route('index.home') }}" class="nav-item nav-link">
+                               <i class="fas fa-home"></i> Home
+                            </a>
+                            <a href="{{ route('products.catalog') }}" class="nav-item nav-link">
+                                <i class="fas fa-shopping-bag"></i> Comprar
+                            </a>
+                            @if (Auth::user())
+                                <a href="{{ route('cart.index') }}" class=" nav-item nav-link">
+                                    <i class="fas fa-shopping-cart"></i> Carrinho
+                                    <span class="badge badge-light">{{ Auth::user()->cart->count() }}</span>
+                                </a>
+                            @endif
+                            <a href="contact.html" class="nav-item nav-link">
+                               Sobre nós
+                            </a>
                         </div>
                     </div>
                 </nav>
@@ -199,6 +349,21 @@
     <main>
         @yield('content')
     </main>
+
+     <!-- Footer Start -->
+     <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+            <div class="col-md-6 px-xl-0">
+                <p class="mb-md-0 text-center text-md-left text-secondary">
+                    &copy; <a class="text-primary" href="#">Antunes Domingos</a>. Todos Direitos Reservados
+                </p>
+            </div>
+            <div class="col-md-6 px-xl-0 text-center text-md-right">
+                <img class="img-fluid" src="img/payments.png" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
     
     <script src="{{ asset('bootstrap/bootstrap.min.js') }}"></script>
     

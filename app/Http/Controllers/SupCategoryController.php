@@ -40,11 +40,11 @@ class SupCategoryController extends Controller
             'name' => ['required'],
         ]);
 
-        SupCategory::create($inputs);
+        $sup = SupCategory::create($inputs);
 
-        return view('admin.categories', [
-            'categs' => Category::all(),
-            'supCategs' => SupCategory::all()
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>"Categoria {$sup->name} criada com successo!"
         ]);
     }
 
@@ -56,7 +56,11 @@ class SupCategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $sup = SupCategory::findOrFail($id);
+       
+        return view('admin.sup-categ-show', [
+            'category' => $sup,
+        ]);
     }
 
     /**
@@ -79,7 +83,18 @@ class SupCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+        ]);
+
+        $sup = SupCategory::findOrFail($id);
+        $sup->name = $request->name;
+        $sup->save();
+
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>'Super Categoria actualizada com successo!'
+        ]);
     }
 
     /**
@@ -90,6 +105,20 @@ class SupCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sup = SupCategory::findOrFail($id);
+
+        if ($sup->categories->count() > 0) {
+            return back()->with('alert', [
+                "type" =>'danger',
+                "message" =>'Não pode ser deletado. Há categorias associados a esta super categoria'
+            ]);
+        }
+
+        $sup->delete();
+
+        return redirect()->route('categories.create')->with('alert', [
+            "type" =>'success',
+            "message" =>"Categoria {$sup->name} eliminada!"
+        ]);
     }
 }

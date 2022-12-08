@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\CartModel;
 use App\Models\Invoice;
+use App\Models\Phone;
+use App\Models\Province;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,13 +21,30 @@ class UserController extends Controller
             'name' => ['required', 'min:3'],
             'gender' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
+            'phone_1' => ['required', 'numeric'],
+            'phone_2' => ['required', 'numeric'],
             'password' => ['required', 'confirmed', 'min:5']
         ]);
 
         $input['password'] = Hash::make($request->input('password'));
-        User::create($input);
 
-        return redirect()->route('user.login');
+        $user = User::create([
+            'name' => $input['name'],
+            'gender' => $input['gender'],
+            'email' => $input['email'],
+            'password' => $input['password'],
+        ]);
+
+        Phone::insert([
+            ['number' => $input['phone_1'], 'user_id' => $user->id],
+            ['number' => $input['phone_2'], 'user_id' => $user->id]
+        ]);
+
+        $alert = [
+            'type' => 'success',
+            'message' => "Usuario {$user->name} criado com sucesso. Faça o Login!"
+        ];
+        return back()->with('alert', $alert);
     }
 
     public function update(Request $request, $id)
@@ -41,7 +60,8 @@ class UserController extends Controller
        $checkout = User::where('email', $request->email)->where('id', '!=', Auth::id())->exists();
 
        if ($checkout) {
-            return back()->with('message', 'Este email jah existe!');
+            $alert = ['danger', 'O email usado já existe!'];
+            return back()->with('alert', $alert);
        }
 
        $user = Auth::user();
@@ -58,7 +78,9 @@ class UserController extends Controller
         $user->phones[1]->save();
 
         Auth::user()->fill($user->toArray());
-        return redirect()->route('user.profile');
+        $alert = ['success', 'Perfil actualizado com sucesso'];
+
+        return back()->with('alert', $alert);
     }
 
     public function profile()
@@ -77,6 +99,7 @@ class UserController extends Controller
         $addresses = Auth::user()->addresses()->orderBy('id', 'desc')->get();
         return view('address-deliver', [
             'addresses' => $addresses,
+            'provinces' => Province::all()
         ]);
     }
 

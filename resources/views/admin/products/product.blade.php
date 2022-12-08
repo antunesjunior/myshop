@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="row mt-5">
-            <div class="col-lg-4 border rounded" style="width: 300px; height:350px">
+            <div class="col-lg-4 border rounded" style="width: 350px; height:350px;">
                 <img src="{{ asset("storage/products/cover/{$product->cover}") }}" 
-                    alt="{{ $product->name }}" class="img-fluid">
+                    alt="{{ $product->name }}" class="img-fluid" style="height: 100%;">
             </div>
             <div class="col-lg-6 offset-1">
                 <h2 class="pb-3">{{ $product->name }} {{ $product->brand }}</h2>
@@ -24,13 +24,15 @@
                             <td>{{ $product->brand }}</td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->stock->qtd_prod }}</td>
-                            <td>Sim</td>
+                            <td>@php
+                                echo $product->show == 1 ? 'sim' : 'Não'
+                            @endphp</td>
                         </tr>
                     </tbody>
                 </table>
                 <article>
                     <header>
-                        <h3 class="h6">Descrição</h3>
+                        <h3 class="h6"><strong>Descrição</strong></h3>
                     </header>
                     <p class="py-2">
                         {{ $product->description }}
@@ -199,6 +201,7 @@
                         <input type="text" name="name" class="form-control"
                             placeholder="Produto" value="{{ $product->name }}">
                     </div>
+                    
                     <div class="row pb-2">
                         <div class="col-6">
                             <input type="text" name="brand" class="form-control"
@@ -209,24 +212,64 @@
                                 placeholder="Preço(kz)"  value="{{ $product->price }}">
                         </div>
                     </div>
-    
+
                     <div class="pb-2">
                         <label class="form-label">Categoria</label>
-                        <select name="category_id" class="form-control">
-                            <option value="0">Nenhuma</option>
-                            @if (!$categs->isEmpty())
-                                @foreach ($categs as $item)
-                                    <option 
-                                    @php
-                                        echo $item->id == $product->category_id ? 'selected':''
-                                    @endphp
-                                    value="{{ $item->id }}"
-                                    >
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
+                            <select name="category_id" class="form-control">
+                                <option value="0">Nenhuma</option>
+                                @if (!$categs->isEmpty())
+                                    @foreach ($categs as $item)
+                                        <option 
+                                        @php
+                                            echo $item->id == $product->category_id ? 'selected':''
+                                        @endphp
+                                        value="{{ $item->id }}"
+                                        >
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                    </div>
+    
+                    <div class="row pb-2">
+                        <div class="col-6">
+                            <label class="form-label">Na montra</label>
+                            <select name="show" class="form-control">
+                                <option 
+                                @php
+                                    echo $product->show == 0 ? 'selected':''
+                                @endphp
+                                value="0"
+                                >Não</option>
+            
+                                <option 
+                                @php
+                                    echo $product->show == 1 ? 'selected':''
+                                @endphp
+                                value="1"
+                                >Sim</option>
+                            </select>
+                        </div>
+    
+                        <div class="col-6">
+                            <label class="form-label">Em destaque</label>
+                            <select name="detach" class="form-control">
+                                <option 
+                                @php
+                                    echo $product->detach == 0 ? 'selected':''
+                                @endphp
+                                value="0"
+                                >Não</option>
+            
+                                <option 
+                                @php
+                                    echo $product->detach == 1 ? 'selected':''
+                                @endphp
+                                value="1"
+                                >Sim</option>
+                            </select>
+                        </div>
                     </div>
     
                     <div>

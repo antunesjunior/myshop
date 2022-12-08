@@ -27,7 +27,7 @@ class VendorController extends Controller
     public function create()
     {
         return view('admin.vendor', [
-            'vendors' => Vendor::all()
+            'vendors' => Vendor::orderBy('id', 'desc')->paginate(8)
         ]);
     }
 
@@ -59,8 +59,9 @@ class VendorController extends Controller
             'vendor_id' => $vendor->id
         ]);
 
-        return view('admin.vendor', [
-            'vendors' => Vendor::all()
+        return redirect()->route('vendors.create')->with('alert', [
+            "type" =>'success',
+            "message" =>"Fornecedor {$vendor->name} criado com successo!"
         ]);
     }
 
@@ -75,7 +76,8 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
 
         return view('admin.vendor-show', [
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'feeds' => $vendor->feeds()->paginate(8)
         ]);
     }
 
@@ -117,7 +119,10 @@ class VendorController extends Controller
             $vendor->save();
         }
         
-        return redirect()->route('vendors.show', $id);
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>"Fornecedor actualizado com successo!"
+        ]);
     }
 
     /**
@@ -131,6 +136,9 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $vendor->delete();
         
-        return redirect()->route('vendors.create');
+        return redirect()->route('vendors.create')->with('alert', [
+            "type" =>'success',
+            "message" =>"Fornecedor '{$vendor->name}' eliminado com successo!"
+        ]);
     }
 }

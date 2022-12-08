@@ -6,8 +6,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Comprar</a>
+                    <a class="breadcrumb-item text-dark" href="{{ route('index.home') }}">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{{ route('products.categs', $product->category->id) }}">Comprar</a>
                     <span class="breadcrumb-item active">Detalhes do Produto</span>
                 </nav>
             </div>
@@ -19,8 +19,8 @@
     <div class="container-fluid pb-5">
         <div class="row px-xl-5">
             <div class="col-lg-5 mb-30">
-                <div class=" position-relative overflow-hidden" style="border: 1px solid black; width: 400px; height:450px">
-                    <img class="img-fluid w-100" src="{{ asset('storage/products/cover/'.$product->cover) }}" alt="Produto">
+                <div class=" position-relative border overflow-hidden" style="width: 450px; height:450px">
+                    <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$product->cover) }}" alt="Produto">
                 </div>
             </div>
 
@@ -35,6 +35,7 @@
 
                     <hr>
                     
+                    @if (Auth::user())
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="mr-3">
                             <form action="{{ route('cart.store') }}" method="POST">
@@ -57,6 +58,7 @@
                             </form>
                         </div>
                     </div>
+                    @endif
 
                 </div>
             </div>
@@ -72,31 +74,23 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel related-carousel">
-                    <div class="product-item bg-light">
-                        <div class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="img/product-1.jpg" alt="">
-                            <div class="product-action">
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                    @foreach ($product->category->products as $item)
+                        <div class="product-item bg-light">
+                            <div class="product-img position-relative overflow-hidden" style="height: 280px">
+                                <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="Produto">
+                            </div>
+                            <div class="text-center py-4">
+                                <a href="{{ route('products.detail', $item->id) }}" class="d-block">
+                                    <span class="h6 text-decoration-none text-truncate">
+                                        {{ $item->name }} {{ $item->brand }}
+                                    </span>
+                                    <div class="d-flex align-items-center justify-content-center mt-2">
+                                        <h5><i class="fas fa-money-bill"></i> {{ $item->price }} kz(s)</h5>
+                                    </div>
+                                </a>
                             </div>
                         </div>
-                        <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="">Product Name Goes Here</a>
-                            <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>$123.00</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-center mb-1">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small>(99)</small>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

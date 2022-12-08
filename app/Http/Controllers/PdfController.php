@@ -6,6 +6,7 @@ use App\Helpers\DateHelper;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Models\Stock;
 use App\Models\StockFeed;
 use App\Models\User;
@@ -57,6 +58,27 @@ class PdfController extends Controller
             'year' => $year
         ]);
         return $pdf->stream("nossa-loja-relatorio-caixa-{$year}.pdf");
+    }
+
+    public function saleYear(Request $request)
+    {
+        $month = $request->month;
+        $monthsList = DateHelper::getMonths();
+
+        $date = "{$request->year}-%";
+        $total = Shop::where('created_at', 'like', $date)->sum('total');
+        $mais =  Shop::where('created_at', 'like', $date)->groupBy('product_id')->count();
+        $menos = Shop::where('created_at', 'like', $date)->groupBy('product_id')->min('product_id');
+
+      dd($total, $mais, $menos);
+
+        $pdf = Pdf::loadView('pdf.sale', [
+            'year' => $request->year,
+            'total' => $total,
+            'mais' => $mais,
+            'menos' => $menos,
+        ]);
+        return $pdf->stream("nossa-loja-relatorio-venda.pdf");
     }
 
     public function caixaMonth(Request $request)

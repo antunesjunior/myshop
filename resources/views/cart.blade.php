@@ -19,7 +19,7 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-9 table-responsive mb-5">
-                <table class="table table-light table-borderless table-hover text-center mb-0">
+                <table class="table table-light table-borderless table-hover mb-0">
                     <thead class="thead-dark">
                         <tr>
                             <th>Produtos</th>
@@ -30,17 +30,17 @@
                             <th>Remove</th>
                         </tr>
                     </thead>
-                    <tbody class="align-middle">
+                    <tbody>
                         @foreach ($products as $item)
                         <tr>
-                            <td class="align-middle">
+                            <td>
                                 <img src="{{ asset("storage/products/cover/{$item->product->cover}") }}" 
                                 alt="{{ $item->product->name }}" style="width: 50px;">
                                 {{ $item->product->name }} 
                             </td>
-                            <td class="align-middle">{{ $item->product->price }} kz(s)</td>
-                            <td class="align-middle">{{ $item->quantity }}</td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">{{ $item->product->price }} kz(s)</td>
+                            <td class="align-middle text-center">{{ $item->quantity }}</td>
+                            <td class="align-middle text-center">
                                 {{ $item->total }} kz(s)
                             </td>
                             <td class="align-middle">

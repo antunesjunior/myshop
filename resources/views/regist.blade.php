@@ -46,7 +46,6 @@
                     <input type="password" name="password_confirmation" 
                     class="form-control" placeholder="Confirmar senha">
                 </div>
-            
             </div>
 
             <input type="submit" value="Criar Conta" class="btn btn-primary">

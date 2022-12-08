@@ -57,7 +57,10 @@ class CartController extends Controller
         ->where('user_id', Auth::id())->exists();
 
         if ($isAdded) {
-            dd('nao adicionou');
+            return back()->with('alert', [
+                "type" =>'warning',
+                "message" =>'Este Produto já existe no carrinho!'
+            ]);
         }
 
         $cart = new CartModel();
@@ -69,12 +72,18 @@ class CartController extends Controller
         $checkout = $cart->product->stock->qtd_prod - $cart->quantity;
         
         if ($checkout < 0) {
-            return back()->with('message', 'Nao ha quantidade suficiente disponivel');
+            return back()->with('alert', [
+                "type" =>'warning',
+                "message" =>'Quantidade indisponível. Reduza Por favor!'
+            ]);
         }
 
         $cart->save();
 
-        return back();
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" =>'Produto adicionado ao carrinho!'
+        ]);;
     }
 
     /**
@@ -121,7 +130,10 @@ class CartController extends Controller
         $checkout = $cart->product->stock->qtd_prod - $cart->quantity;
         
         if ($checkout < 0) {
-            return back()->with('message', 'Nao ha quantidade suficiente disponivel');
+            return back()->with('alert', [
+                'type' => 'warning',
+                'message' => 'Nao ha quantidade suficiente disponivel'
+            ]);
         }
 
         $cart->quantity = $request->number;

@@ -40,12 +40,10 @@
                         <th>Produto</th>
                         <th>Marca</th>
                         <th>Qtd entrada</th>
-                        <th>Estado Produto</th>
-                        <th>Estado carregamento</th>
                     </thead>
                     <tbody>
                         @if (!$vendor->feeds->isEmpty())
-                            @foreach ($vendor->feeds as $item)
+                            @foreach ($feeds as $item)
                                 @if (isset($item->product))
                                     <tr>
                                         <td>
@@ -54,14 +52,13 @@
                                         <td>{{ $item->product->name }}</td>
                                         <td>{{ $item->product->brand }}</td>
                                         <td>{{ $item->qtd_prod }}</td>
-                                        <td>---</td>
-                                        <td>---</td>
                                     </tr>
                                 @endif
                             @endforeach
                         @endif
                     </tbody>
                 </table>
+                {{ $feeds->links() }}
             </div>
         </div>
     </div>

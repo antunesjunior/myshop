@@ -55,7 +55,7 @@ class AddressController extends Controller
             'province_id' => $request->prov,
         ]);
 
-        return redirect()->route('address.index');
+        return back();
     }
 
     /**

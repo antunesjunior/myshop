@@ -47,7 +47,8 @@ class StockFeedController extends Controller
             return back();
         }
 
-        $record = Product::findOrFail($request->product)->stock;
+        $product =  Product::findOrFail($request->product);
+        $record = $product->stock;
         $record->qtd_prod += $request->quantity;
         
         if ($record->save()) {
@@ -58,8 +59,10 @@ class StockFeedController extends Controller
             ]);
         }
 
-        return redirect()->route('products.show', $request->product);
-        
+        return back()->with('alert', [
+            "type" =>'success',
+            "message" => "{$product->name} {$product->brand} foi abastecido com {$request->quantity} unidade(s)!"
+        ]);  
     }
 
     /**

@@ -14,7 +14,7 @@
             </a>
         </div>
         <div class="col-md-3 mb-4">
-            <a href="{{ route('pdf.stock') }}" class="btn btn-dark">
+            <a href="{{ route('reports.sale') }}" class="btn btn-dark">
                 Relatório de de vendas
             </a>
         </div>
