@@ -1,4 +1,4 @@
-<div class="container-sm">
+<div class="container">
     <div class="row">
         <div class="col-8">
             <div class="alert alert-{{ $type }} alert-dismissible fade show" role="alert">

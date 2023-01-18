@@ -86,16 +86,16 @@
             <span class="bg-secondary pr-3">Categorias</span>
         </h2>
         <div class="row px-xl-5 pb-3">
-            @foreach ($categories as $item)
+            @foreach ($categories as $category)
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                <a class="text-decoration-none" href="{{ route('products.categs', $item->id) }}">
+                <a class="text-decoration-none" href="{{ route('products.catalogue.category', $category->id) }}">
                     <div class="cat-item d-flex align-items-center mb-4">
                         <div class="overflow-hidden" style="width: 150px; height: 100px">
-                            <img class="img-fluid" src="{{ asset('storage/categories/cover/'.$item->cover) }}">
+                            <img class="img-fluid" src="{{ asset('storage/categories/cover/'.$category->cover) }}">
                         </div>
                         <div class="flex-fill pl-3">
-                            <h6>{{ $item->name }}</h6>
-                            <small class="text-body">{{ $item->products()->count() }} Produtos</small>
+                            <h6>{{ $category->name }}</h6>
+                            <small class="text-body">{{ $category->products->count() }} Produtos</small>
                         </div>
                     </div>
                 </a>
@@ -111,17 +111,17 @@
             <span class="bg-secondary pr-3">Produtos em Destaque</span>
         </h2>
         <div class="row px-xl-5">
-            @foreach ($detach as $item)
+            @foreach ($detachedProducts as $product)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden" style="height: 280px">
-                            <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="{{ $item->name }}">
+                            <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$product->cover) }}" alt="{{ $product->name }}">
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate d-block" href="{{ route('products.detail', $item->id) }}">
-                                <span>{{ $item->name }} {{ $item->brand }}</span>
+                            <a class="h6 text-decoration-none text-truncate d-block" href="{{ route('product.detail', $product->id) }}">
+                                <span>{{ $product->name }} {{ $product->brand }}</span>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5><i class="fas fa-money-bill"></i> {{ $item->price }}</h6>
+                                    <h5><i class="fas fa-money-bill"></i> {{ $product->price }}</h6>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mb-1">
                                     <small class="fa fa-star text-primary mr-1"></small>
@@ -168,7 +168,7 @@
                             <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="Produto">
                         </div>
                         <div class="text-center py-4">
-                            <a href="{{ route('products.detail', $item->id) }}" class="d-block">
+                            <a href="{{ route('product.detail', $item->id) }}" class="d-block">
                                 <span class="h6 text-decoration-none text-truncate">
                                     {{ $item->name }} {{ $item->brand }}
                                 </span>

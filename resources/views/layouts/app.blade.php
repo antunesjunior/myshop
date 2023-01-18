@@ -20,12 +20,13 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">
-                <i class="fas fa-user-plus"></i> Registrar
+                <i class="fas fa-user-plus"></i> Criar Conta
               </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+
             <div class="modal-body">
               <form action="{{ route('user.store') }}" method="POST">
                 @csrf
@@ -182,7 +183,7 @@
                                   <i class="fas fa-sign-in-alt"></i> Login
                                 </a>
                                 <a href="#" class="dropdown-item" type="button" data-toggle="modal" data-target="#create">
-                                  Criar Conta
+                                   <i class="fas fa-user-plus"></i> Criar Conta
                                 </a>
                             @endif
                         </div>
@@ -205,6 +206,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             @if (session()->get('alert'))
                 @include('shared.alert', [
@@ -214,13 +216,13 @@
             @endif
             
             <div class="col-lg-4">
-                <a href="{{ route('index.home') }}" class="text-decoration-none">
+                <a href="{{ route('home') }}" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Nossa</span>
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Loja</span>
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
-                <form action="{{ route('products.spub') }}" method="POST">
+                <form action="{{ route('user.search.products') }}" method="GET">
                     @csrf
                     <div class="input-group">
                         <input type="text" name="value" class="form-control" placeholder="Pesquisar por Produtos">
@@ -251,25 +253,37 @@
                 <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
                     <div class="navbar-nav w-100">
                         @php
-                        $cats = \App\Models\Category::whereNull('sup_category_id')->get();
-                        $sup = \App\Models\SupCategory::all();
-                    
+                            $categories = \App\Models\Category::whereNull('sup_category_id')->get();
+                            $supCategories = \App\Models\SupCategory::all();
                         @endphp
-                        <a href="{{ route('products.catalog') }}" class="nav-item nav-link">Todos</a>
-                        @foreach ($sup as $item)
-                            @if (!$item->categories->isEmpty())
+
+                        <a href="{{ route('products.catalogue') }}" class="nav-item nav-link">Todos</a>
+
+                        @foreach ($supCategories as $supCategory)
+
+                            @if (!$supCategory->categories->isEmpty())
+
                                 <div class="nav-item dropdown dropright">
-                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ $item->name }} <i class="fa fa-angle-right float-right mt-1"></i></a>
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                        {{ $supCategory->name }} <i class="fa fa-angle-right float-right mt-1"></i>
+                                    </a>
                                     <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
-                                        @foreach ($item->categories as $cat)
-                                            <a href="{{ route('products.categs', $cat->id) }}" class="dropdown-item">{{ $cat->name }}</a>
+                                        @foreach ($supCategory->categories as $category)
+                                            <a href="{{ route('products.catalogue.category', $category->id) }}" class="dropdown-item">
+                                                {{ $category->name }}
+                                            </a>
                                         @endforeach
                                     </div>
                                 </div>
+
                             @endif
+
                         @endforeach
-                        @foreach ($cats as $item)
-                            <a href="{{ route('products.categs', $item->id) }}" class="nav-item nav-link">{{ $item->name }}</a>
+                        
+                        @foreach ($categories as $category)
+                            <a href="{{ route('products.catalogue.category', $category->id) }}" class="nav-item nav-link">
+                                {{ $category->name }}
+                            </a>
                         @endforeach
                     </div>
                 </nav>
@@ -277,26 +291,28 @@
             <div class="col-lg-9">
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                     <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Nossa</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Loja</span>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="{{ route('index.home') }}" class="nav-item nav-link">
+                            <a href="{{ route('home') }}" class="nav-item nav-link">
                                <i class="fas fa-home"></i> Home
                             </a>
-                            <a href="{{ route('products.catalog') }}" class="nav-item nav-link">
+                            <a href="{{ route('products.catalogue') }}" class="nav-item nav-link">
                                 <i class="fas fa-shopping-bag"></i> Comprar
                             </a>
+
                             @if (Auth::user())
                                 <a href="{{ route('cart.index') }}" class=" nav-item nav-link">
                                     <i class="fas fa-shopping-cart"></i> Carrinho
                                     <span class="badge badge-light">{{ Auth::user()->cart->count() }}</span>
                                 </a>
                             @endif
+
                             <a href="contact.html" class="nav-item nav-link">
                                Sobre nós
                             </a>
@@ -308,44 +324,7 @@
     </div>
     <!-- Navbar End -->
 
-    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <form action="#" method="post">
-                    @csrf
-                    @method('POST')
-
-                    <div class="mb-3 mb-4">
-                        <input type="email" name="email" 
-                                class="form-control" placeholder="Seu email">
-                    </div>
-                
-                    <div class="mb-3">
-                        <input type="password" name="password" 
-                                class="form-control" placeholder="Sua senha">
-                    </div>
-
-                    <div class="mb-3">
-                        <input class="form-check-input" type="checkbox">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          <small>Manter-se conectado</small>
-                        </label>
-                    </div>
-
-                    <input type="submit" value="entrar" class="btn btn-primary">
-                </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
+   
     <main>
         @yield('content')
     </main>
@@ -355,7 +334,11 @@
         <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary" href="#">Antunes Domingos</a>. Todos Direitos Reservados
+                    &copy; 
+                    <a class="text-primary" href="https://www.facebook.com/antunesjunior.junior" target="_blank">
+                        Antunes Domingos
+                    </a>
+                    . Todos Direitos Reservados
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">

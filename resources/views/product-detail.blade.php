@@ -6,8 +6,10 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="{{ route('index.home') }}">Home</a>
-                    <a class="breadcrumb-item text-dark" href="{{ route('products.categs', $product->category->id) }}">Comprar</a>
+                    <a class="breadcrumb-item text-dark" href="{{ route('home') }}">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{{ route('products.catalogue') }}">
+                        Comprar
+                    </a>
                     <span class="breadcrumb-item active">Detalhes do Produto</span>
                 </nav>
             </div>
@@ -36,28 +38,28 @@
                     <hr>
                     
                     @if (Auth::user())
-                    <div class="d-flex align-items-center mb-4 pt-2">
-                        <div class="mr-3">
-                            <form action="{{ route('cart.store') }}" method="POST">
-                                @csrf
-                                @method('POST')
-                                <input type="hidden" name="product" value="{{ $product->id }}">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <label for="#" class="form-label">Quantidade</label>
-                                        <input type="number" name="number" class="form-control bg-secondary border-0 text-center"
-                                        min="1" value="1">
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <div class="mr-3">
+                                <form action="{{ route('cart.store') }}" method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" name="product" value="{{ $product->id }}">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label for="#" class="form-label">Quantidade</label>
+                                            <input type="number" name="number" class="form-control bg-secondary border-0 text-center"
+                                            min="1" value="1">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="#" class="form-label" style="visibility: hidden">submeter</label>
+                                            <button class="btn btn-primary px-3">
+                                                <i class="fa fa-shopping-cart mr-1"></i>Adicionar no carrinho
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        <label for="#" class="form-label" style="visibility: hidden">submeter</label>
-                                        <button class="btn btn-primary px-3">
-                                            <i class="fa fa-shopping-cart mr-1"></i>Adicionar no carrinho
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     @endif
 
                 </div>
@@ -80,7 +82,7 @@
                                 <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="Produto">
                             </div>
                             <div class="text-center py-4">
-                                <a href="{{ route('products.detail', $item->id) }}" class="d-block">
+                                <a href="{{ route('product.detail', $item->id) }}" class="d-block">
                                     <span class="h6 text-decoration-none text-truncate">
                                         {{ $item->name }} {{ $item->brand }}
                                     </span>

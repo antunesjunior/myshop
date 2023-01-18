@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ProductHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Stock;
@@ -18,55 +19,57 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function catalog()
+    public function catalogue()
     {
-        $products = Product::getjoinStock()->inRandomOrder()->paginate(21);
+        $products = Product::getByEnoughtStockQuantity()
+                    ->inRandomOrder()
+                    ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
+
         return view('shop', [
             'products' => $products,
-            'catName' => "Todos Categorias"
+            'catName' => "Todas as Categorias"
         ]);
     }
 
-    public function catalogCat($id)
+    public function catalogueByCategory($id)
     {
-        $cat = Category::findOrFail($id);
+        $category = Category::findOrFail($id);
+
+        $products = Product::getByEnoughtStockQuantity()
+                    ->where('category_id', $category->id)
+                    ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
 
         return view('shop', [
-            'products' => $cat->products()->join('stock', 'products.id', '=', 'stock.id')->where('show', 1)->where('qtd_prod', '>', 20)->paginate(21),
-            'catName' => $cat->name
+            'products' => $products,
+            'catName' => $category->name
         ]);
     }
 
-    public function searchPub(Request $request)
-    {
-        $request->validate([
-            'value' => 'required',
-        ]);
-
-        $result = Product::getjoinStock()->where('name', 'LIKE',"%{$request->value}%")->paginate(21);
+    public function userSearch(Request $request)
+    { 
+        $request->validate(['value' => 'required']);
+        $products = Product::userSearch($request->value)
+                    ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
 
         return view('shop', [
-            'products' => $result,
+            'products' => $products,
             'catName'  => "Resultados da pesquisa por '{$request->value}'"
         ]);
     }
 
-    public function search(Request $request)
+    public function adminSearch(Request $request)
     {
-        $request->validate([
-            'value' => 'required',
-        ]);
+        $request->validate(['value' => 'required']);
+        $products = Product::search($request->value)
+                    ->paginate(ProductHelper::PER_PAGE_ADMIN);;
 
-        $result = Product::where('name', 'LIKE',"%{$request->value}%")->where('show', 1)->paginate(8);
-
-        $message = "Total de resultados da pesquisa por '{$request->value}': {$result->count()}";
         session()->flash('alert', [
             'type' => 'info',
-            'message' => $message
+            'message' => "Total de resultados da pesquisa por '{$request->value}': {$products->count()}"
         ]);
 
         return view('admin.products.create-product', [
-            'products' => $result,
+            'products' => $products,
             'categs'  => Category::all()
         ]);
     }
@@ -88,7 +91,7 @@ class ProductController extends Controller
     public function create()
     {
         return view('admin.products.create-product', [
-            'products' => Product::paginate(8),
+            'products' => Product::paginate(ProductHelper::PER_PAGE_ADMIN),
             'categs' => Category::all()
         ]);
     }

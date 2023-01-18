@@ -40,7 +40,7 @@
                         </div>
                         @endforeach
                    @else
-                       <p class="h6" style="color: #ddd"><i>Nao ha nenhuma entrega pendente</i></p>
+                       <p class="h5" style="color: #ddd"><i>Nao ha nenhuma entrega pendente</i></p>
                    @endif
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">

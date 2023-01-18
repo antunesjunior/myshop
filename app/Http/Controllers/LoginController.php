@@ -8,21 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login()
-    {
-        return view('login');
-    }
-
-    public function regist()
-    {
-        return view('regist');
-    }
-
-    public function loginAdmin()
-    {
-        return view('admin.login');
-    }
-
     public function authUser(Request $request)
     {
         $validate =  $request->validate([
@@ -63,21 +48,12 @@ class LoginController extends Controller
         if (!$user->is_admin) {
             return back()->with('alert', [
                 'type' => 'danger',
-                'message' => 'Não és um administrador'
+                'message' => 'Não és um administrador!'
             ]);
         }
 
         $request->session()->regenerate();
-
         return redirect()->route('admin.home');
-    }
-
-    public function logoutAdmin(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-
-        return redirect()->route('index.home');
     }
 
     public function logoutUser(Request $request)
@@ -85,6 +61,9 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
 
-        return redirect()->route('index.home');
+        return back()->with('alert', [
+            'type' => 'info',
+            'message' => 'Obrigado pela preferencia, volte sempre!'
+        ]);
     }
 }

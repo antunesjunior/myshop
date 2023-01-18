@@ -58,7 +58,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('admin.logout') }}" class="nav-link">Sair</a>
+                <a href="{{ route('user.logout') }}" class="nav-link">Sair</a>
               </li>
             </ul>
           </div>

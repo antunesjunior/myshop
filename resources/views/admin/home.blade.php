@@ -11,8 +11,8 @@
         @if (!$stock->isEmpty())
         <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading"> <i class="fas fa-exclamation-triangle"></i> Produtos em Baixa quantidade</h4>
-            <p>Verifique todos os produtos em baixa quantidade(inferior a 10 unidades) no stock na lista que se segue...</p>
-            <hr>
+            <p>Verifique todos os produtos em baixa quantidade (inferior a 10 unidades) no stock na lista que se segue...</p>
+
         </div>
 
         <table class="table">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">Quantidade</label>
-                                    <input type="number" min="1" value="{{ $item->id + 220 }}" name="quantity" class="form-control">
+                                    <input type="number" min="1" value="{{ 550 }}" name="quantity" class="form-control">
                                 </div>
                                 <div class="col-4">
                                     <label for="" style="visibility: hidden">Submeter</label>

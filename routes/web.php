@@ -28,21 +28,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, "home"])->name('index.home');
+Route::get('/', [HomeController::class, "home"])->name('home');
 
-Route::post('/user/create', [UserController::class, "store"])->name('user.store');
-Route::get('/admin/login', [LoginController::class, "loginAdmin"])->name('admin.login');
+Route::post('/usuario/criar', [UserController::class, "store"])->name('user.store');
+Route::post('/usuario/autenticacao', [LoginController::class, "authUser"])->name('user.login');
+Route::post('/usuario/admin/autenticacao', [LoginController::class, "authAdmin"])->name('admin.login');
+Route::get('/usuario/logout', [LoginController::class, "logoutUser"])->name('user.logout');
 
-Route::post('/user/auth', [LoginController::class, "authUser"])->name('user.login');
-Route::post('/user/admin', [LoginController::class, "authAdmin"])->name('admin.login');
+Route::get('/produto/pesquisa/', [ProductController::class, "userSearch"])->name('user.search.products');
+Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
 
-Route::get('/user/logout', [LoginController::class, "logoutUser"])->name('user.logout');
-Route::get('/admin/logout', [LoginController::class, "logoutAdmin"])->name('admin.logout');
-
-Route::post('/produto/search/public', [ProductController::class, "searchPub"])->name('products.spub');
-Route::get('/produto/categoria/{id}', [ProductController::class, "catalogCat"])->name('products.categs');
-Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('products.detail');
-Route::get('/produto/catalogo', [ProductController::class, "catalog"])->name('products.catalog');
+Route::get('/produtos/catalogo/todos', [ProductController::class, "catalogue"])->name('products.catalogue');
+Route::get('/produtos/catalogo/{id}', [ProductController::class, "catalogueByCategory"])->name('products.catalogue.category');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -50,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home/test', [HomeController::class, "home"])->name('test');
 
     Route::resource('products', ProductController::class);
-    Route::post('/products/search', [ProductController::class, "search"])->name('products.search');
+    Route::post('/products/search', [ProductController::class, "adminSearch"])->name('products.search');
 
     Route::resource('cart', CartController::class);
     Route::resource('address', AddressController::class);

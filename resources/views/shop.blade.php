@@ -29,19 +29,19 @@
                         </div>
                     </div>
                 </div>
-                @foreach ($products as $item)
+                @foreach ($products as $product)
                         <div class="col-lg-4 col-md-4 col-sm-6 pb-1">
                             <div class="product-item bg-light mb-4">
-                                <div class="product-img position-relative overflow-hidden" style="height: 280px">
-                                    <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="Produto">
+                                <div class="product-img position-relative overflow-hidden" style="height: 300px">
+                                    <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$product->cover) }}" alt="Produto">
                                 </div>
                                 <div class="text-center py-4">
-                                    <a href="{{ route('products.detail', $item->id) }}" class="d-block">
+                                    <a href="{{ route('product.detail', $product->id) }}" class="d-block">
                                         <span class="h6 text-decoration-none text-truncate">
-                                            {{ $item->name }} {{ $item->brand }}
+                                            {{ $product->name }} {{ $product->brand }}
                                         </span>
                                         <div class="d-flex align-items-center justify-content-center mt-2">
-                                            <h5><i class="fas fa-money-bill"></i> {{ $item->price }} kz(s)</h5>
+                                            <h5><i class="fas fa-money-bill"></i> {{ $product->price }} kz(s)</h5>
                                         </div>
                                     </a>
                                 </div>
