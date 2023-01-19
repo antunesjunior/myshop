@@ -40,6 +40,24 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public static function getBySuperCategoryId($id)
+    {
+        $products = self::select(
+            'products.id',
+            'products.name',
+            'products.brand',
+            'products.cover',
+            'products.price',
+        )
+        ->join('categories', 'products.category_id', '=', 'categories.id')
+        ->join('sup_categories', 'categories.sup_category_id', '=', 'sup_categories.id')
+        ->where('sup_categories.id', $id)
+        ->inRandomOrder()
+        ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
+
+        return $products;
+    }
+
     public static function search($key)
     {
         return self::where('name', 'LIKE',"%{$key}%")

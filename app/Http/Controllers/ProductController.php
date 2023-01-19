@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockFeed;
+use App\Models\SupCategory;
 use App\Models\Vendor;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
@@ -34,7 +35,6 @@ class ProductController extends Controller
     public function catalogueByCategory($id)
     {
         $category = Category::findOrFail($id);
-
         $products = Product::getByEnoughtStockQuantity()
                     ->where('category_id', $category->id)
                     ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
@@ -44,6 +44,18 @@ class ProductController extends Controller
             'catName' => $category->name
         ]);
     }
+
+    public function catalogueBySuperCategory($id)
+    {
+        $supCategory = SupCategory::findOrFail($id);
+        $products = Product::getBySuperCategoryId($supCategory->id);
+       
+        return view('shop', [
+            'products' => $products,
+            'catName' => $supCategory->name
+        ]);
+    }
+
 
     public function userSearch(Request $request)
     { 

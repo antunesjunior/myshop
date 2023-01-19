@@ -39,7 +39,8 @@ Route::get('/produto/pesquisa/', [ProductController::class, "userSearch"])->name
 Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
 
 Route::get('/produtos/catalogo/todos', [ProductController::class, "catalogue"])->name('products.catalogue');
-Route::get('/produtos/catalogo/{id}', [ProductController::class, "catalogueByCategory"])->name('products.catalogue.category');
+Route::get('/produtos/catalogo/categoria/{id}', [ProductController::class, "catalogueByCategory"])->name('products.catalogue.category');
+Route::get('/produtos/catalogo/supercategoria/{id}', [ProductController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
 
 Route::middleware(['auth'])->group(function () {
 

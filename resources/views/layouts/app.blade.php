@@ -268,6 +268,7 @@
                                         {{ $supCategory->name }} <i class="fa fa-angle-right float-right mt-1"></i>
                                     </a>
                                     <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+                                        <a href="{{ route('products.catalogue.supcategory', $supCategory->id) }}" class="dropdown-item">Todos</a>
                                         @foreach ($supCategory->categories as $category)
                                             <a href="{{ route('products.catalogue.category', $category->id) }}" class="dropdown-item">
                                                 {{ $category->name }}
