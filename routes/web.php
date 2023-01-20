@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\ProductCatalogueController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
@@ -38,9 +39,9 @@ Route::get('/usuario/logout', [LoginController::class, "logoutUser"])->name('use
 Route::get('/produto/pesquisa/', [ProductController::class, "userSearch"])->name('user.search.products');
 Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
 
-Route::get('/produtos/catalogo/todos', [ProductController::class, "catalogue"])->name('products.catalogue');
-Route::get('/produtos/catalogo/categoria/{id}', [ProductController::class, "catalogueByCategory"])->name('products.catalogue.category');
-Route::get('/produtos/catalogo/supercategoria/{id}', [ProductController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
+Route::get('/produtos/catalogo/todos', [ProductCatalogueController::class, "catalogue"])->name('products.catalogue');
+Route::get('/produtos/catalogo/categoria/{id}', [ProductCatalogueController::class, "catalogueByCategory"])->name('products.catalogue.category');
+Route::get('/produtos/catalogo/supercategoria/{id}', [ProductCatalogueController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
 
 Route::middleware(['auth'])->group(function () {
 

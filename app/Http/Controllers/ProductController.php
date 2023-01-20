@@ -15,48 +15,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function catalogue()
-    {
-        $products = Product::getByEnoughtStockQuantity()
-                    ->inRandomOrder()
-                    ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
-
-        return view('shop', [
-            'products' => $products,
-            'catName' => "Todas as Categorias"
-        ]);
-    }
-
-    public function catalogueByCategory($id)
-    {
-        $category = Category::findOrFail($id);
-        $products = Product::getByEnoughtStockQuantity()
-                    ->where('category_id', $category->id)
-                    ->paginate(ProductHelper::PER_PAGE_CATALOGUE);
-
-        return view('shop', [
-            'products' => $products,
-            'catName' => $category->name
-        ]);
-    }
-
-    public function catalogueBySuperCategory($id)
-    {
-        $supCategory = SupCategory::findOrFail($id);
-        $products = Product::getBySuperCategoryId($supCategory->id);
-       
-        return view('shop', [
-            'products' => $products,
-            'catName' => $supCategory->name
-        ]);
-    }
-
-
     public function userSearch(Request $request)
     { 
         $request->validate(['value' => 'required']);
