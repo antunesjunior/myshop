@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ProductHelper;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Stock;
@@ -72,26 +74,16 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $input = $request->validate([
-            'name'  => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['file', 'required'],
-            'price' => ['required', 'numeric'],
-            'category_id' => ['required', 'numeric']
-        ]);
+        $input = $request->validated();
 
-
-        if ($request->input('category_id') == 0) {
+        if ($request->input('category_id') == 0) 
+        {
             unset($input['category_id']);
         }
 
-        $cover = $request->file('cover');
-        $coverName = $cover->hashName();
-        $cover->storeAs('public/products/cover', $coverName);
-        $input['cover'] = $coverName;
+        $input['cover'] = ProductHelper::uploadImage($request->cover);
 
         $stock = Stock::create();
 
@@ -140,35 +132,24 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        $input = $request->validate([
-            'name'  => ['required'],
-            'brand' => ['required'],
-            'description' => ['required'],
-            'cover' => ['nullable', 'file'],
-            'price' => ['required', 'numeric'],
-            'detach' => ['required', 'numeric'],
-            'category_id' => ['required', 'numeric'],
-            'show' => ['required', 'numeric'],
-        ]);
+        $input = $request->validated();
 
-        if ($request->input('category_id') == 0) {
+        if ($request->input('category_id') == 0) 
+        {
             $input['category_id'] = null;
         }
 
         $product = Product::findOrFail($id);
 
-        if ($request->hasFile('cover')) {
-            $cover = $request->file('cover');
-            $coverName = $cover->hashName();
-            $cover->storeAs('public/products/cover', $coverName);
-            $input['cover'] = $coverName;
-
-            Storage::delete("public/products/cover/{$product->cover}");
+        if ($request->hasFile('cover')) 
+        {
+            $input['cover'] = ProductHelper::updateImage($request->cover, $product->cover);
         }
 
         $product->fill($input)->save();
+
         return back()->with('alert', [
             "type" =>'success',
             "message" =>"Produto actualizado com successo!"
