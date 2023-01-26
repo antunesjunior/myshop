@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddressRequest;
 use App\Models\Address;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -38,14 +39,9 @@ class AddressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddressRequest $request)
     {
-        $request->validate([
-            'prov' => ['required'],
-            'muni' => ['required'],
-            'bairro' => ['required'],
-            'rua' => ['required'],
-        ]);
+        $request->validated();
 
         Address::create([
             'rua' => $request->rua,
@@ -92,14 +88,9 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AddressRequest $request, $id)
     {
-        $request->validate([
-            'prov' => ['required'],
-            'muni' => ['required'],
-            'bairro' => ['required'],
-            'rua' => ['required'],
-        ]);
+        $request->validated();
 
         $address = Address::findOrFail($id);
 

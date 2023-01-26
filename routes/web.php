@@ -48,11 +48,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
     Route::get('/home/test', [HomeController::class, "home"])->name('test');
 
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)->except('edit');
     Route::post('/products/search', [ProductController::class, "adminSearch"])->name('products.search');
 
     Route::resource('cart', CartController::class);
-    Route::resource('address', AddressController::class);
+    Route::resource('address', AddressController::class)->except(['create', 'show']);
     Route::get('/user/shop/{address}', [UserController::class, "shop"])->name('user.shop');
     Route::get('/user/delive/address', [UserController::class, "addressDeliver"])->name('user.address');
     Route::get('/user/shop/{address}/checkout', [UserController::class, "checkout"])->name('user.checkout');
