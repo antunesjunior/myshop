@@ -37,30 +37,29 @@
 
                     <hr>
                     
-                    @if (Auth::user())
-                        <div class="d-flex align-items-center mb-4 pt-2">
-                            <div class="mr-3">
-                                <form action="{{ route('cart.store') }}" method="POST">
-                                    @csrf
-                                    @method('POST')
-                                    <input type="hidden" name="product" value="{{ $product->id }}">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label for="#" class="form-label">Quantidade</label>
-                                            <input type="number" name="number" class="form-control bg-secondary border-0 text-center"
-                                            min="1" value="1">
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="#" class="form-label" style="visibility: hidden">submeter</label>
-                                            <button class="btn btn-primary px-3">
-                                                <i class="fa fa-shopping-cart mr-1"></i>Adicionar no carrinho
-                                            </button>
-                                        </div>
+
+                    <div class="d-flex align-items-center mb-4 pt-2">
+                        <div class="mr-3">
+                            <form action="{{ route('cart.store') }}" method="POST">
+                                @csrf
+                                @method('POST')
+                                <input type="hidden" name="product" value="{{ $product->id }}">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label for="#" class="form-label">Quantidade</label>
+                                        <input type="number" name="number" class="form-control bg-secondary border-0 text-center"
+                                        min="1" value="1">
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="col-6">
+                                        <label for="#" class="form-label" style="visibility: hidden">submeter</label>
+                                        <button class="btn btn-primary px-3">
+                                            <i class="fa fa-shopping-cart mr-1"></i>Adicionar no carrinho
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    @endif
+                    </div>
 
                 </div>
             </div>

@@ -31,57 +31,71 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, "home"])->name('home');
 
-Route::post('/usuario/criar', [UserController::class, "store"])->name('user.store');
-Route::post('/usuario/autenticacao', [LoginController::class, "authUser"])->name('user.login');
-Route::post('/usuario/admin/autenticacao', [LoginController::class, "authAdmin"])->name('admin.login');
-Route::get('/usuario/logout', [LoginController::class, "logoutUser"])->name('user.logout');
+Route::prefix('usuario')->group(function () {
+    Route::post('/criar', [UserController::class, "store"])->name('user.store');
+    Route::post('/login', [LoginController::class, "authUser"])->name('user.login');
+    Route::post('/admin/login', [LoginController::class, "authAdmin"])->name('admin.login');     
+});
 
-Route::get('/produto/pesquisa/', [ProductController::class, "userSearch"])->name('user.search.products');
-Route::get('/produto/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
+Route::resource('cart', CartController::class);
 
-Route::get('/produtos/catalogo/todos', [ProductCatalogueController::class, "catalogue"])->name('products.catalogue');
-Route::get('/produtos/catalogo/categoria/{id}', [ProductCatalogueController::class, "catalogueByCategory"])->name('products.catalogue.category');
-Route::get('/produtos/catalogo/supercategoria/{id}', [ProductCatalogueController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
+Route::prefix('produto')->group(function () {
+    Route::get('/pesquisa/', [ProductController::class, "userSearch"])->name('user.search.products');
+    Route::get('/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
 
-Route::middleware(['auth'])->group(function () {
+    Route::prefix('catalogo')->group(function () {
+        Route::get('/todos', [ProductCatalogueController::class, "catalogue"])->name('products.catalogue');
+        Route::get('/categoria/{id}', [ProductCatalogueController::class, "catalogueByCategory"])->name('products.catalogue.category');
+        Route::get('/supercategoria/{id}', [ProductCatalogueController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
+    });
+});
 
+Route::middleware(['is_admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
-    Route::get('/home/test', [HomeController::class, "home"])->name('test');
-
-    Route::resource('products', ProductController::class)->except('edit');
-    Route::post('/products/search', [ProductController::class, "adminSearch"])->name('products.search');
-
-    Route::resource('cart', CartController::class);
-    Route::resource('address', AddressController::class)->except(['create', 'show']);
-    Route::get('/user/shop/{address}', [UserController::class, "shop"])->name('user.shop');
-    Route::get('/user/delive/address', [UserController::class, "addressDeliver"])->name('user.address');
-    Route::get('/user/shop/{address}/checkout', [UserController::class, "checkout"])->name('user.checkout');
-    Route::get('/user/profile', [UserController::class, "profile"])->name('user.profile');
-    Route::put('/user/{id}/update', [UserController::class, "update"])->name('user.update');
-    Route::get('/usuario/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
 
     Route::resource('vendors', VendorController::class);
     Route::resource('deliver', DeliverController::class);
+    Route::resource('feeds', StockFeedController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('supcategs', SupCategoryController::class);
-    Route::resource('feeds', StockFeedController::class);
+    Route::resource('products', ProductController::class)->except('edit');
+    Route::post('/products/search', [ProductController::class, "adminSearch"])->name('products.search');
 
-   
-    Route::get('/reports/sale', [ReportController::class, 'sale'])->name('reports.sale');
+    Route::get('/relatorios', [PdfController::class, 'reports'])->name('pdf.reports');
 
-    Route::get('/reports/caixa', [ReportController::class, 'caixa'])->name('reports.caixa');
+    Route::prefix('relatorio')->group(function () {
+        Route::get('/venda', [ReportController::class, 'sale'])->name('reports.sale');
+        Route::get('/caixa', [ReportController::class, 'caixa'])->name('reports.caixa');
+        //Route::post('/reports/sell', [PdfController::class, 'saleYear'])->name('pdf.sale.year');
 
-    Route::post('/reports/sell', [PdfController::class, 'saleYear'])->name('pdf.sale.year');
-    Route::post('/pdf/caixa/year', [PdfController::class, 'caixaYear'])->name('pdf.caixa.year');
-    Route::post('/pdf/caixa/month', [PdfController::class, 'caixaMonth'])->name('pdf.caixa.month');
-    Route::get('/pdf/caixa/day', [PdfController::class, 'caixaDay'])->name('pdf.caixa.day');
-    Route::post('/pdf/caixa/period', [PdfController::class, 'caixaPeriod'])->name('pdf.caixa.period');
+        Route::prefix('caixa')->group(function () {
+            Route::post('/ano', [PdfController::class, 'caixaYear'])->name('pdf.caixa.year');
+            Route::post('/mes', [PdfController::class, 'caixaMonth'])->name('pdf.caixa.month');
+            Route::get('/dia', [PdfController::class, 'caixaDay'])->name('pdf.caixa.day'); 
+            Route::post('/periodo', [PdfController::class, 'caixaPeriod'])->name('pdf.caixa.period');
+        });
 
-    Route::get('/pdf/reports', [PdfController::class, 'reports'])->name('pdf.reports');
-    Route::get('/pdf/deliver/{id}', [PdfController::class, 'deliver'])->name('pdf.deliver');
-    Route::get('/pdf/products', [PdfController::class, 'products'])->name('pdf.products');
-    Route::get('/pdf/vendors', [PdfController::class, 'vendors'])->name('pdf.vendors');
-    Route::get('/pdf/stock', [PdfController::class, 'stock'])->name('pdf.stock');
-    Route::get('/pdf/invoice/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
-    
+        Route::get('/entrega/{id}', [PdfController::class, 'deliver'])->name('pdf.deliver');
+        Route::get('/produtos', [PdfController::class, 'products'])->name('pdf.products');
+        Route::get('/fornecedor', [PdfController::class, 'vendors'])->name('pdf.vendors');
+        Route::get('/stock', [PdfController::class, 'stock'])->name('pdf.stock');
+        Route::get('/factura/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
+        
+    });
+
+});
+
+Route::middleware(['auth', 'is_customer'])->group(function () {
+
+    Route::prefix('cliente')->group(function () {
+        Route::get('/perfil', [UserController::class, "profile"])->name('user.profile');
+        Route::put('/{id}/editar', [UserController::class, "update"])->name('user.update');
+        Route::get('/compra/{address}', [UserController::class, "shop"])->name('user.shop');
+        Route::get('/enderecos', [UserController::class, "addressDeliver"])->name('user.address');
+        Route::get('/compra/{address}/verificacao', [UserController::class, "checkout"])->name('user.checkout');
+        Route::get('/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
+        Route::get('/logout', [LoginController::class, "logoutUser"])->name('user.logout');
+    });
+
+    Route::resource('address', AddressController::class)->except(['create', 'show']);
 });
