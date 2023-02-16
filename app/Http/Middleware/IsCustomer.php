@@ -16,12 +16,9 @@ class IsCustomer
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()) {
-            if ($request->user()->is_admin != 0) {
-                return redirect()->route('admin.home');
-            }
+        if ($request->user()->is_admin == 1) {
+            return redirect()->route('admin.home');
         }
-        
         return $next($request);
     }
 }

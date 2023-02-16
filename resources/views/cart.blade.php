@@ -44,12 +44,12 @@
                                 {{ $item->total }} kz(s)
                             </td>
                             <td class="align-middle">
-                                <a href="{{ route('cart.edit', $item->id) }}" class="btn btn-sm btn-primary">
+                                <a href="#" class="btn btn-sm btn-primary">
                                 Editar
                                 </a>
                             </td>
                             <td class="align-middle">
-                                <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
+                                <form action="#" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-danger">

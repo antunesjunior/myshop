@@ -18,39 +18,47 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-Route::get('/', [HomeController::class, "home"])->name('home');
 
-Route::prefix('usuario')->group(function () {
-    Route::post('/criar', [UserController::class, "store"])->name('user.store');
-    Route::post('/login', [LoginController::class, "authUser"])->name('user.login');
-    Route::post('/admin/login', [LoginController::class, "authAdmin"])->name('admin.login');     
-});
+Route::middleware(['is_guest'])->group(function () {
+    Route::get('/', [HomeController::class, "home"])->name('home');
 
-Route::resource('cart', CartController::class);
+    Route::prefix('usuario')->group(function () {
+        Route::post('/criar', [UserController::class, "store"])->name('user.store');
+        Route::post('/login', [LoginController::class, "authUser"])->name('user.login');
+        Route::post('/admin/login', [LoginController::class, "authAdmin"])->name('admin.login');     
+    });
 
-Route::prefix('produto')->group(function () {
-    Route::get('/pesquisa/', [ProductController::class, "userSearch"])->name('user.search.products');
-    Route::get('/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
+    Route::resource('cart', CartController::class);
 
-    Route::prefix('catalogo')->group(function () {
-        Route::get('/todos', [ProductCatalogueController::class, "catalogue"])->name('products.catalogue');
-        Route::get('/categoria/{id}', [ProductCatalogueController::class, "catalogueByCategory"])->name('products.catalogue.category');
-        Route::get('/supercategoria/{id}', [ProductCatalogueController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
+    Route::prefix('produto')->group(function () {
+        Route::get('/pesquisa', [ProductController::class, "userSearch"])->name('user.search.products');
+        Route::get('/{id}/detalhe', [ProductController::class, "detail"])->name('product.detail');
+
+        Route::prefix('catalogo')->group(function () {
+            Route::get('/todos', [ProductCatalogueController::class, "catalogue"])->name('products.catalogue');
+            Route::get('/categoria/{id}', [ProductCatalogueController::class, "catalogueByCategory"])->name('products.catalogue.category');
+            Route::get('/supercategoria/{id}', [ProductCatalogueController::class, "catalogueBySuperCategory"])->name('products.catalogue.supcategory');
+        });
     });
 });
 
-Route::middleware(['is_admin'])->group(function () {
+Route::middleware(['auth', 'is_customer'])->group(function () {
+
+    Route::prefix('cliente')->group(function () {
+        Route::get('/perfil', [UserController::class, "profile"])->name('user.profile');
+        Route::put('/{id}/editar', [UserController::class, "update"])->name('user.update');
+        Route::get('/compra/{address}', [UserController::class, "shop"])->name('user.shop');
+        Route::get('/enderecos', [UserController::class, "addressDeliver"])->name('user.address');
+        Route::get('/compra/{address}/verificacao', [UserController::class, "checkout"])->name('user.checkout');
+        Route::get('/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
+        Route::get('/logout', [LoginController::class, "logout"])->name('user.logout');
+    });
+
+    Route::resource('address', AddressController::class)->except(['create', 'show']);
+});
+
+Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
 
     Route::resource('vendors', VendorController::class);
@@ -82,20 +90,4 @@ Route::middleware(['is_admin'])->group(function () {
         Route::get('/factura/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
         
     });
-
-});
-
-Route::middleware(['auth', 'is_customer'])->group(function () {
-
-    Route::prefix('cliente')->group(function () {
-        Route::get('/perfil', [UserController::class, "profile"])->name('user.profile');
-        Route::put('/{id}/editar', [UserController::class, "update"])->name('user.update');
-        Route::get('/compra/{address}', [UserController::class, "shop"])->name('user.shop');
-        Route::get('/enderecos', [UserController::class, "addressDeliver"])->name('user.address');
-        Route::get('/compra/{address}/verificacao', [UserController::class, "checkout"])->name('user.checkout');
-        Route::get('/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
-        Route::get('/logout', [LoginController::class, "logoutUser"])->name('user.logout');
-    });
-
-    Route::resource('address', AddressController::class)->except(['create', 'show']);
 });

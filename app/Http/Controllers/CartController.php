@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -15,13 +16,19 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+public function index()
     {
         $total = 0;
-        $products = Auth::user()->cart;
         
-        foreach ($products as $product) {
-            $total += $product->total;
+        if (Auth::user()) {
+            $products = Auth::user()->cart;
+            $total = $products->sum('total');
+
+        } else {
+            $products = session('guestCart');
+            foreach ($products as $product) {
+                $total += $product->total; 
+            }
         }
         
         return view('cart', [
@@ -49,7 +56,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'number' => ['required'],
+            'number'  => ['required'],
             'product' => ['required']
         ]);
 
@@ -72,18 +79,29 @@ class CartController extends Controller
         $checkout = $cart->product->stock->qtd_prod - $cart->quantity;
         
         if ($checkout < 0) {
+
             return back()->with('alert', [
                 "type" =>'warning',
                 "message" =>'Quantidade indisponível. Reduza Por favor!'
             ]);
         }
 
-        $cart->save();
+        if (!$request->user()) {
+            if (!session()->has('guestCart')) {
+                session()->put('guestCart', []);
+            }
+    
+            session()->push('guestCart', $cart);
+
+        } else {
+            $cart->save();
+        }
+
 
         return back()->with('alert', [
             "type" =>'success',
             "message" =>'Produto adicionado ao carrinho!'
-        ]);;
+        ]);
     }
 
     /**

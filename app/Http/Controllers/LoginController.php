@@ -56,14 +56,11 @@ class LoginController extends Controller
         return redirect()->route('admin.home');
     }
 
-    public function logoutUser(Request $request)
+    public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
 
-        return back()->with('alert', [
-            'type' => 'info',
-            'message' => 'Obrigado pela preferencia, volte sempre!'
-        ]);
+        return redirect()->route('home');
     }
 }

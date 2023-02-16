@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsAdmin
+class IsGuest
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->is_admin == 0) {
-            return redirect()->route('home');
+        if ($request->user() && ($request->user()->is_admin != 0)) {
+            return redirect()->route('admin.home');
         }
-
         return $next($request);
     }
 }

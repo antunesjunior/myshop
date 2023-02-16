@@ -14,6 +14,8 @@ class HomeController extends Controller
 {
     public function home()
     {
+        //dd(session()->all());
+
         $detachedProducts = Product::getByEnoughtStockQuantity()
                             ->where('detach', 1)->limit(4)->get();
                             

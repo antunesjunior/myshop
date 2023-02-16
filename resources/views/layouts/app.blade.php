@@ -306,14 +306,23 @@
                             <a href="{{ route('products.catalogue') }}" class="nav-item nav-link">
                                 <i class="fas fa-shopping-bag"></i> Comprar
                             </a>
+                            <a href="{{ route('cart.index') }}" class=" nav-item nav-link">
+                                <i class="fas fa-shopping-cart"></i> Carrinho
 
-                            @if (Auth::user())
-                                <a href="{{ route('cart.index') }}" class=" nav-item nav-link">
-                                    <i class="fas fa-shopping-cart"></i> Carrinho
-                                    <span class="badge badge-light">{{ Auth::user()->cart->count() }}</span>
-                                </a>
-                            @endif
-
+                                @if (Auth::user())
+                                    <span class="badge badge-light">
+                                        {{ Auth::user()->cart->count() }}
+                                    </span>
+                                @else
+                                    @if (session()->has('guestCart'))
+                                        <span class="badge badge-light">
+                                            {{ count(session('guestCart')) }}
+                                        </span>
+                                    @else
+                                        <span class="badge badge-light">0</span>
+                                    @endif
+                                @endif
+                            </a>
                             <a href="contact.html" class="nav-item nav-link">
                                Sobre nós
                             </a>
