@@ -55,6 +55,7 @@ public function index()
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'number'  => ['required'],
             'product' => ['required']

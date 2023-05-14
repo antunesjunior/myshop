@@ -33,9 +33,9 @@
         <table class="table text-center" style="color: black" border>
             <thead>
                 <th>Produto</th>
-                <th>Preco Unitario</th>
+                <th>Preço Unitario</th>
                 <th>Quantidade</th>
-                <th>Preco total</th>
+                <th>Preço total</th>
             </thead>
             <tbody>
                 @foreach ($invoice->shop as $item)

@@ -52,14 +52,16 @@ Route::middleware(['auth', 'is_customer'])->group(function () {
         Route::get('/enderecos', [UserController::class, "addressDeliver"])->name('user.address');
         Route::get('/compra/{address}/verificacao', [UserController::class, "checkout"])->name('user.checkout');
         Route::get('/fatura/{id}', [InvoiceController::class, "show"])->name('invoice.show');
-        Route::get('/logout', [LoginController::class, "logout"])->name('user.logout');
+        //Route::get('/logout', [LoginController::class, "logout"])->name('user.logout');
     });
 
     Route::resource('address', AddressController::class)->except(['create', 'show']);
+    Route::get('/factura/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
 });
 
 Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('/admin/home', [HomeController::class, "homeAdmin"])->name('admin.home');
+    Route::get('/logout', [LoginController::class, "logout"])->name('user.logout');
 
     Route::resource('vendors', VendorController::class);
     Route::resource('deliver', DeliverController::class);
@@ -87,7 +89,5 @@ Route::middleware(['auth','is_admin'])->group(function () {
         Route::get('/produtos', [PdfController::class, 'products'])->name('pdf.products');
         Route::get('/fornecedor', [PdfController::class, 'vendors'])->name('pdf.vendors');
         Route::get('/stock', [PdfController::class, 'stock'])->name('pdf.stock');
-        Route::get('/factura/{id}', [PdfController::class, 'invoice'])->name('pdf.invoice');
-        
     });
 });

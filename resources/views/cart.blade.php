@@ -20,13 +20,12 @@
         <div class="row px-xl-5">
             <div class="col-lg-9 table-responsive mb-5">
                 <table class="table table-light table-borderless table-hover mb-0">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark text-center">
                         <tr>
                             <th>Produtos</th>
                             <th>Preco</th>
                             <th>Quantidade</th>
                             <th>Total</th>
-                            <th>Editar</th>
                             <th>Remove</th>
                         </tr>
                     </thead>
@@ -39,23 +38,26 @@
                                 {{ $item->product->name }} 
                             </td>
                             <td class="align-middle text-center">{{ $item->product->price }} kz(s)</td>
-                            <td class="align-middle text-center">{{ $item->quantity }}</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-minus" >
+                                        <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="{{ $item->quantity }}">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="align-middle text-center">
                                 {{ $item->total }} kz(s)
                             </td>
-                            <td class="align-middle">
-                                <a href="#" class="btn btn-sm btn-primary">
-                                Editar
-                                </a>
-                            </td>
-                            <td class="align-middle">
-                                <form action="#" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">
-                                        remover
-                                    </button>
-                                </form>
+                            <td class="align-middle text-center">
+                                <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
                             </td>
                         </tr>
                         @endforeach
@@ -77,6 +79,13 @@
         </div>
     </div>
     <!-- Cart End -->
+@endsection
 
 
+@section('script')
+    <script>
+        $(function(){
+            alert('Estou funcionando');
+        })
+    </script>
 @endsection

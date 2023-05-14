@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         //dd(session()->all());
 
-        $detachedProducts = Product::getByEnoughtStockQuantity()
+        $featuredProducts = Product::getByEnoughtStockQuantity()
                             ->where('detach', 1)->limit(4)->get();
                             
         $categories = Category::whereNotNull('cover')->limit(8)->get();
@@ -25,7 +25,7 @@ class HomeController extends Controller
         return view('index', [
             'categories' => $categories,
             'recentProducts' => $recentProducts,
-            'detachedProducts' => $detachedProducts
+            'featuredProducts' => $featuredProducts
         ]);
     }
 

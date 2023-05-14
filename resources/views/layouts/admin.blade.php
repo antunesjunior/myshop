@@ -14,13 +14,13 @@
        }
     </style>
 
-    <title>NossaLoja</title>
+    <title>Admin | NossaLoja</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-light py-2">
         <div class="container">
           <a class="d-block navbar-brand" href="#">
-                <h2>NossaLoja</h2>
+                <h3>Admin - NossaLoja</h3>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

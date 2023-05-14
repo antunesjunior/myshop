@@ -111,7 +111,7 @@
             <span class="bg-secondary pr-3">Produtos em Destaque</span>
         </h2>
         <div class="row px-xl-5">
-            @foreach ($detachedProducts as $product)
+            @foreach ($featuredProducts as $product)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden" style="height: 280px">
@@ -121,7 +121,7 @@
                             <a class="h6 text-decoration-none text-truncate d-block" href="{{ route('product.detail', $product->id) }}">
                                 <span>{{ $product->name }} {{ $product->brand }}</span>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5><i class="fas fa-money-bill"></i> {{ $product->price }}</h6>
+                                    <h5><i class="fas fa-money-bill"></i> {{ $product->price }} kz(s)</h5>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mb-1">
                                     <small class="fa fa-star text-primary mr-1"></small>
@@ -164,8 +164,16 @@
             @foreach ($recentProducts as $item)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
-                        <div class="product-img position-relative overflow-hidden" style="height: 280px">
+                        <div class="product-img position-relative overflow-hidden" style="height: 280px; cursor: pointer;">
                             <img class="img-fluid w-100" style="height: 100%" src="{{ asset('storage/products/cover/'.$item->cover) }}" alt="Produto">
+                            <div class="product-action">
+                                <a class="btn btn-outline-dark btn-square shop-product" data-action="{{ route('cart.store') }}">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            </div>
                         </div>
                         <div class="text-center py-4">
                             <a href="{{ route('product.detail', $item->id) }}" class="d-block">
@@ -173,7 +181,7 @@
                                     {{ $item->name }} {{ $item->brand }}
                                 </span>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5><i class="fas fa-money-bill"></i> {{ $item->price }} kz(s)</h5>
+                                    <h6><i class="fas fa-money-bill"></i> {{ $item->price }} kz(s)</h6>
                                 </div>
                             </a>
                         </div>
@@ -183,7 +191,34 @@
         </div>
     </div>
     <!-- Products End -->
+@endsection
 
 
+@section('script')
+    <script>
+        $(function(){
+            $('.shop-product').click(function(event){
+                event.preventDefault()
+                let route = $(this).attr('data-action')
 
+                /*$.ajax({
+                    url: "http://127.0.0.1:8000/cart",
+                    methode: "POST",
+                    dataType: "json",
+                    data: {
+                        product: id,
+                        number: 1
+                    },
+
+                    success: function(response) {
+                        console.log(response);
+                    }
+                })*/
+                
+                alert(route);
+
+                
+            })
+        })
+    </script>
 @endsection

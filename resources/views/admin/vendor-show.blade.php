@@ -5,7 +5,7 @@
         <div class="row mt-5">
             <div class="col-5">
                 <header>
-                    <h1>{{ $vendor->name }}</h1>
+                    <h2>Fornecedor: {{ $vendor->name }}</h2>
                     <h3 class="h6">Desde: {{ date('d/m/Y', strtotime($vendor->created_at)) }}</h3>
                     <hr>
                 </header>
@@ -33,7 +33,7 @@
 
         <div class="row">
             <div class="col-12">
-                <h3>Histórico</h3>
+                <h3>Histórico de Abastecimento</h3>
                 <table class="table text-center">
                     <thead class="table-dark">
                         <th>Data</th>
@@ -51,7 +51,7 @@
                                         </td>
                                         <td>{{ $item->product->name }}</td>
                                         <td>{{ $item->product->brand }}</td>
-                                        <td>{{ $item->qtd_prod }}</td>
+                                        <td>{{ $item->qtd_prod }} unidade(s)</td>
                                     </tr>
                                 @endif
                             @endforeach
